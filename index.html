@@ -15,70 +15,122 @@
         
         #panorama { width: 100vw; height: 100vh; transform: translateZ(0); will-change: transform; }
 
-        /* ================= HAPUS SPINNER, HANYA GARIS STATUS PROGRESS DI TENGAH PRESISI ================= */
-        .pnlm-load-box p, .pnlm-lbox { display: none !important; }
-        .pnlm-load-box {
-            background: transparent !important;
-            position: fixed !important; top: 50% !important; left: 50% !important; 
-            transform: translate(-50%, -50%) !important;
-            width: 140px !important; height: 10px !important; 
-            margin: 0 !important; border: none !important; z-index: 999999;
-            box-shadow: none !important; pointer-events: none;
-        }
-        /* Garis Progress Asli Pannellum diposisikan presisi di tengah */
-        .pnlm-progressbar {
-            position: absolute !important; top: 0 !important; left: 0 !important;
-            width: 140px !important; height: 6px !important; border-radius: 4px !important;
-            background: rgba(255, 255, 255, 0.2) !important; overflow: hidden !important;
-            box-sizing: border-box !important; margin: 0 !important;
-            border: none !important;
-        }
-        /* Bagian bar yang berjalan */
-        .pnlm-progressbar-fill {
-            background: #ffffff !important; height: 100% !important; border-radius: 4px !important;
-        }
-
-        /* HILANGKAN IKON BAWAAN (BINTIK) */
+        /* ================= HILANGKAN WATERMARK & BINTIK BAWAAN PANNELLUM ================= */
+        .pnlm-panorama-info { display: none !important; } 
         .pnlm-hotspot-base { background-color: transparent !important; border-radius: 0 !important; }
         .pnlm-hotspot { background: none !important; }
         .pnlm-tooltip { display: none !important; }
+        .pnlm-about-dialog { display: none !important; }
+
+        /* ================= LOADING PROGRESS (EFEK KACA PUTIH) ================= */
+        .pnlm-load-box p, .pnlm-lbox { display: none !important; }
+        .pnlm-load-box {
+            background: rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            border-radius: 12px !important;
+            position: fixed !important; top: 50% !important; left: 50% !important; 
+            transform: translate(-50%, -50%) !important;
+            width: 150px !important; height: 8px !important; 
+            padding: 3px !important; margin: 0 !important; z-index: 999999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important; pointer-events: none;
+        }
+        .pnlm-progressbar {
+            position: relative !important; top: 0 !important; left: 0 !important;
+            width: 100% !important; height: 100% !important; border-radius: 8px !important;
+            background: rgba(0, 0, 0, 0.1) !important; overflow: hidden !important;
+            border: none !important; margin: 0 !important;
+        }
+        .pnlm-progressbar-fill {
+            background: #ffffff !important; height: 100% !important; border-radius: 8px !important;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
+        }
+
+        /* ================= KONTROL (+, -, Fullscreen, Gyroscope) PERBAIKAN TATA LETAK PRESISI ================= */
+        .pnlm-controls {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important; 
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 12px !important; padding: 6px !important;
+            width: auto !important; height: auto !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+            margin-top: 15px !important; margin-left: 15px !important;
+            transform: scale(0.9) !important; 
+            transform-origin: top left !important;
+        }
+        .pnlm-control {
+            position: relative !important; top: 0 !important; left: 0 !important;
+            background-color: transparent !important; border: none !important;
+            border-radius: 6px !important; margin: 0 !important; 
+            width: 26px !important; height: 26px !important; 
+            transition: all 0.2s ease !important;
+        }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.4) !important; }
+        .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle, .pnlm-orientation-button { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4)); }
+
+        /* ================= WATERMARK HANYA DI FULLSCREEN & PALING BAWAH ================= */
+        .custom-watermark {
+            display: none; 
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+            z-index: 99999; pointer-events: none;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 12px; border-radius: 15px; 
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+            white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
         /* ================= BUKU TAMU MODAL ================= */
         #guestbook-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85); z-index: 999999; justify-content: center; align-items: center;
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.5); z-index: 999999; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         }
         .guestbook-content {
-            background: rgba(20, 20, 20, 0.95); padding: 30px; border-radius: 16px; width: 300px;
-            border: 2px solid #555; text-align: center; position: relative; color: #fff;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            background: rgba(255, 255, 255, 0.25); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 30px; border-radius: 16px; width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+            text-align: center; position: relative; color: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .gb-close { position: absolute; top: 12px; right: 18px; cursor: pointer; color: #aaa; font-size: 22px; font-weight: bold; }
-        .gb-close:hover { color: #fff; }
-        .guestbook-content h3 { margin: 0 0 5px 0; font-size: 18px; }
-        .guestbook-content p { margin: 0 0 20px 0; font-size: 12px; color: #ccc; }
+        .gb-close { position: absolute; top: 12px; right: 18px; cursor: pointer; color: #fff; font-size: 22px; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        .gb-close:hover { color: #ddd; }
+        .guestbook-content h3 { margin: 0 0 5px 0; font-size: 22px; color: #ffffff; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
+        .guestbook-content p { margin: 0 0 20px 0; font-size: 13px; color: #ffffff; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         .gb-input {
-            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #666;
-            background: #111; color: #fff; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.8); color: #000; font-weight: 600; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;
+            transition: all 0.2s;
         }
-        .gb-input:focus { outline: none; border-color: #fff; }
+        .gb-input::placeholder { color: #555; font-weight: 500; }
+        .gb-input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.95); }
         .gb-btn {
-            width: 100%; padding: 12px; background: #fff; color: #000; border: none; border-radius: 8px;
+            width: 100%; padding: 12px; background: #ffffff; color: #000000; 
+            border: none; border-radius: 8px;
             font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .gb-btn:hover { background: #ddd; transform: translateY(-2px); }
+        .gb-btn:hover { background: #eeeeee; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
 
         /* ================= TOMBOL MUSIK ================= */
         .music-btn {
-            position: absolute; top: 20px; right: 20px; z-index: 9999;
+            position: absolute; top: 15px; right: 15px; z-index: 9999;
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4); color: #fff;
-            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
-            display: flex; align-items: center; gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.4); color: rgba(255, 255, 255, 0.9);
+            width: 34px; height: 34px; border-radius: 10px;
+            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; padding: 0;
         }
-        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
+        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
 
         /* MODAL / POPUP WEB */
         #web-modal {
@@ -98,59 +150,88 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* DESAIN IKON VEKTOR MURNI (TANPA LATAR BELAKANG) */
-        .clean-icon-btn {
+        /* ================= DESAIN IKON & KETERANGAN ================= */
+        .clean-icon-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; pointer-events: auto; transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px; padding: 4px 8px; opacity: 0.7; 
         }
-        .clean-icon-btn:hover { transform: translateY(-4px) scale(1.15); }
-        .clean-icon-btn svg { 
-            width: 38px; height: 38px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; 
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,1));
+        .clean-icon-box:hover { transform: translateY(-3px) scale(1.1); opacity: 1; background: rgba(255, 255, 255, 0.3); }
+        
+        .clean-icon-box svg { 
+            width: 18px; height: 18px; 
+            fill: none; stroke: rgba(255, 255, 255, 0.9); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; 
         }
         .icon-label {
-            color: #ffffff; font-size: 12px; font-weight: 800; margin-top: 6px;
-            text-shadow: 1px 1px 3px #000, -1px -1px 3px #000, 1px -1px 3px #000, -1px 1px 3px #000;
+            color: #ffffff; font-size: 8px; 
+            font-weight: 700; margin-top: 2px;
             text-align: center; white-space: nowrap; pointer-events: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
         }
 
         .icon-arrow-up svg { animation: moveUp 1.5s infinite ease-in-out; }
-        @keyframes moveUp { 0%, 100% { transform: translateY(4px); } 50% { transform: translateY(-4px); } }
+        @keyframes moveUp { 0%, 100% { transform: translateY(1.5px); } 50% { transform: translateY(-1.5px); } }
 
         .icon-glow svg { animation: pulseGlow 2.5s infinite ease-in-out; }
         @keyframes pulseGlow { 
-            0%, 100% { filter: drop-shadow(0 3px 6px rgba(0,0,0,1)); } 
-            50% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)) drop-shadow(0 3px 6px rgba(0,0,0,1)); } 
+            0%, 100% { stroke: rgba(255, 255, 255, 0.7); } 
+            50% { stroke: rgba(255, 255, 255, 1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.8)); } 
+        }
+
+        /* ================= DESAIN OVERLAY LAYAR MONITOR ================= */
+        .monitor-overlay {
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s;
+            pointer-events: auto;
+        }
+        .monitor-overlay:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+        .monitor-text {
+            color: #fff; font-size: 14px; font-weight: bold;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            pointer-events: none; letter-spacing: 1px;
         }
 
         /* GELEMBUNG INFORMASI 3D */
         .custom-card {
-            display: none; position: absolute; bottom: 70px; left: -110px; background: #ffffff;
-            padding: 18px 22px; border-radius: 12px; width: 260px; text-align: left;
+            display: none; position: absolute; bottom: 50px; left: -110px; background: #ffffff;
+            padding: 15px 18px; border-radius: 10px; width: 240px; text-align: left; 
             color: #000; pointer-events: auto; cursor: default; border: 3px solid #000;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.7), 0 15px 30px rgba(0,0,0,0.4);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.7), 0 10px 20px rgba(0,0,0,0.4);
             background-image: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%); z-index: 9999;
         }
         .custom-card.show { display: block; animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popUp { from { opacity: 0; transform: translateY(15px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes popUp { from { opacity: 0; transform: translateY(10px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .close-card { float: right; cursor: pointer; color: #000; font-size: 20px; font-weight: bold; line-height: 1; }
+        .close-card { float: right; cursor: pointer; color: #000; font-size: 18px; font-weight: bold; line-height: 1; }
         .close-card:hover { color: #555; }
-        .custom-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #000; font-weight: 800; border-bottom: 2px solid #000; padding-bottom: 5px; }
-        .custom-card p { margin: 0 0 12px 0; font-size: 13px; color: #333; line-height: 1.5; font-weight: 500; }
+        .custom-card h4 { margin: 0 0 6px 0; font-size: 14px; color: #000; font-weight: 800; border-bottom: 2px solid #000; padding-bottom: 4px; }
+        .custom-card p { margin: 0 0 10px 0; font-size: 12px; color: #333; line-height: 1.4; font-weight: 500; }
         
         .card-link {
-            display: block; background: #fff; color: #000; text-decoration: none; padding: 8px 12px;
-            border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-align: center;
-            border: 2px solid #000; box-shadow: 3px 3px 0 #000; transition: all 0.1s;
+            display: block; background: #fff; color: #000; text-decoration: none; padding: 6px 10px;
+            border-radius: 6px; font-size: 11px; font-weight: bold; margin-bottom: 6px; text-align: center;
+            border: 2px solid #000; box-shadow: 2px 2px 0 #000; transition: all 0.1s;
         }
-        .card-link:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; background: #e0e0e0; }
+        .card-link:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #000; background: #e0e0e0; }
         .wa-button {
             display: flex; align-items: center; justify-content: center; background: #000; color: #fff; text-decoration: none;
-            padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; gap: 6px; 
-            border: 2px solid #000; box-shadow: 3px 3px 0 rgba(0,0,0,0.5); transition: all 0.1s;
+            padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; gap: 6px; 
+            border: 2px solid #000; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); transition: all 0.1s;
         }
-        .wa-button:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.5); background: #333; }
+        .wa-button:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0,0,0,0.5); background: #333; }
     </style>
 </head>
 <body>
@@ -161,18 +242,22 @@
 </audio>
 
 <!-- Tombol Musik -->
-<button id="music-btn" class="music-btn">🎵 Putar Musik</button>
+<button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
+    <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+</button>
+
+<!-- Watermark Bawah Tengah -->
+<div class="custom-watermark">Virtual Office - Media Tulisan Manusia</div>
 
 <!-- Modal Buku Tamu -->
 <div id="guestbook-modal">
     <div class="guestbook-content">
         <span class="gb-close" onclick="closeGuestbook()">&times;</span>
         <h3>Buku Tamu</h3>
-        <p>Silakan isi daftar hadir pengunjung</p>
+        <p>Silakan masukkan nama Anda untuk mulai</p>
         <form id="gb-form" onsubmit="submitGuestbook(event)">
             <input type="text" id="gb-nama" class="gb-input" placeholder="Nama Anda" required>
-            <input type="email" id="gb-email" class="gb-input" placeholder="Email Anda" required>
-            <button type="submit" id="gb-btn" class="gb-btn">Masuk</button>
+            <button type="submit" id="gb-btn" class="gb-btn">Mulai</button>
         </form>
     </div>
 </div>
@@ -194,16 +279,17 @@
 // ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");
 var musicBtn = document.getElementById("music-btn");
+var musicIcon = document.getElementById("music-icon");
 var isPlaying = false;
 
 musicBtn.addEventListener("click", function() {
     if (isPlaying) {
         music.pause();
-        musicBtn.innerHTML = "🎵 Putar Musik";
+        musicIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>'; 
         isPlaying = false;
     } else {
         music.play();
-        musicBtn.innerHTML = "🔊 Jeda Musik";
+        musicIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>'; 
         isPlaying = true;
     }
 });
@@ -221,8 +307,7 @@ function submitGuestbook(event) {
     event.preventDefault(); 
     var btn = document.getElementById('gb-btn');
     var nama = document.getElementById('gb-nama').value;
-    var email = document.getElementById('gb-email').value;
-    btn.innerHTML = 'Mengirim...';
+    btn.innerHTML = 'Memuat...';
     
     fetch("https://formsubmit.co/ajax/ptmediatulisanmanusia@gmail.com", {
         method: "POST",
@@ -232,18 +317,17 @@ function submitGuestbook(event) {
         },
         body: JSON.stringify({
             _subject: "Pengunjung-Virtual",
-            Nama: nama,
-            Email: email
+            Nama: nama
         })
     })
     .then(response => response.json())
     .then(data => {
-        btn.innerHTML = 'Berhasil Masuk!';
-        setTimeout(closeGuestbook, 1000);
+        btn.innerHTML = 'Selamat Datang!';
+        setTimeout(closeGuestbook, 800);
     })
     .catch(error => {
-        btn.innerHTML = 'Berhasil Masuk!';
-        setTimeout(closeGuestbook, 1000);
+        btn.innerHTML = 'Selamat Datang!';
+        setTimeout(closeGuestbook, 800);
     });
 }
 
@@ -257,13 +341,13 @@ function closeWebModal() {
     document.getElementById("web-iframe").src = "";
 }
 
-// ================= FUNGSI IKON PANNELLUM =================
+// ================= FUNGSI IKON PANNELLUM UMUM =================
 function customMsgTooltip(hotSpotDiv, args) {
-    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.width = '45px'; hotSpotDiv.style.height = '45px'; 
     hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
 
     var iconBtn = document.createElement('div');
-    iconBtn.className = 'clean-icon-btn icon-glow';
+    iconBtn.className = 'clean-icon-box icon-glow';
     iconBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
     iconBtn.innerHTML += '<div class="icon-label">Info</div>'; 
 
@@ -278,15 +362,16 @@ function customMsgTooltip(hotSpotDiv, args) {
     cardDiv.querySelector('.close-card').onclick = function(e) { cardDiv.classList.remove('show'); e.stopPropagation(); };
     cardDiv.onmousedown = function(e) { e.stopPropagation(); }; cardDiv.ontouchstart = function(e) { e.stopPropagation(); };
 
-    hotSpotDiv.appendChild(iconBtn); hotSpotDiv.appendChild(cardDiv);
+    hotSpotDiv.appendChild(iconBtn);
+    hotSpotDiv.appendChild(cardDiv);
 }
 
 function customArrowTooltip(hotSpotDiv, label) {
-    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.width = '45px'; hotSpotDiv.style.height = '45px'; 
     hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
     
     var arrowBtn = document.createElement('div');
-    arrowBtn.className = 'clean-icon-btn icon-arrow-up';
+    arrowBtn.className = 'clean-icon-box icon-arrow-up';
     arrowBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>';
     if(label) { arrowBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
     
@@ -294,36 +379,41 @@ function customArrowTooltip(hotSpotDiv, label) {
 }
 
 function customDoorTooltip(hotSpotDiv, label) {
-    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.width = '45px'; hotSpotDiv.style.height = '45px'; 
     hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
     
     var doorBtn = document.createElement('div');
-    doorBtn.className = 'clean-icon-btn icon-glow';
+    doorBtn.className = 'clean-icon-box icon-glow';
     doorBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 20V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v15"></path><path d="M2 20h20"></path><path d="M14 12v.01"></path></svg>';
     if(label) { doorBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
     
     hotSpotDiv.appendChild(doorBtn);
 }
 
-function customWebLink(hotSpotDiv, label) {
-    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
-    hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
+// ================= FUNGSI LAYAR MONITOR =================
+function customMonitorScreen(hotSpotDiv, label) {
+    hotSpotDiv.style.width = '260px'; 
+    hotSpotDiv.style.height = '145px'; 
     
-    var webBtn = document.createElement('div');
-    webBtn.className = 'clean-icon-btn icon-glow';
-    webBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
-    if(label) { webBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
+    var overlay = document.createElement('div');
+    overlay.className = 'monitor-overlay';
     
-    webBtn.onclick = function() { openWebModal("https://mediatulisanmanusia.online"); };
-    hotSpotDiv.appendChild(webBtn);
+    var text = document.createElement('div');
+    text.className = 'monitor-text';
+    text.innerHTML = label || 'Buka Layar';
+    
+    overlay.appendChild(text);
+    overlay.onclick = function() { openWebModal("https://mediatulisanmanusia.online"); };
+    
+    hotSpotDiv.appendChild(overlay);
 }
 
 // ================= INIT PANNELLUM =================
 var viewer = pannellum.viewer('panorama', {
     "default": {
         "firstScene": "depan",
-        "author": "Media Tulisan Manusia",
-        "sceneFadeDuration": 1500, 
+        "author": "Media Tulisan Manusia", 
+        "sceneFadeDuration": 800, 
         "autoLoad": true, 
         "compass": false,
         "autoRotate": -1.5, 
@@ -352,38 +442,58 @@ var viewer = pannellum.viewer('panorama', {
             "hotSpots": [
                 { "pitch": -13.1, "yaw": -10.7, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Amankan legalitas karya cipta Anda bersama kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/kategori.pdf\"); return false;' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
                 { "pitch": -6.9, "yaw": 16.3, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Wujudkan buku impian Anda dengan kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/ketentuan.pdf\"); return false;' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
-                { "pitch": -33.5, "yaw": 6.4, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
-                { "pitch": -28.9, "yaw": -107.0, "type": "scene", "sceneId": "literasi", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Literasi" },
-                { "pitch": -4.1, "yaw": -40.2, "type": "scene", "sceneId": "rapat", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Rapat" },
-                { "pitch": -13.5, "yaw": 56.8, "type": "scene", "sceneId": "lorong", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Eksekutif" },
-                { "pitch": -13.3, "yaw": 178.7, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
+                { "pitch": -28.9, "yaw": -107.0, "type": "scene", "sceneId": "literasi", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Literasi" },
+                { "pitch": -4.1, "yaw": -40.2, "type": "scene", "sceneId": "rapat", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Rapat" },
+                { "pitch": -13.5, "yaw": 56.8, "type": "scene", "sceneId": "lorong", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Eksekutif" },
+                { "pitch": -13.3, "yaw": 178.7, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Tunggu" }
             ]
         },
         "literasi": {
             "panorama": "g3.png",
             "hotSpots": [
-                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customWebLink, "createTooltipArgs": "Buka Layar" },
-                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
+                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
+                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         },
         "rapat": {
             "panorama": "g4.png",
             "hotSpots": [
-                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" },
-                { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" }
+                { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
+                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         },
         "lorong": {
             "panorama": "g5.png",
             "hotSpots": [
                 { "pitch": -10.0, "yaw": 20.0, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>" },
-                { "pitch": -2.1, "yaw": 36.6, "createTooltipFunc": customWebLink, "createTooltipArgs": "Website" },
-                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
+                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         }
     }
 });
+
+// ================= LOGIKA WATERMARK MUNCUL SAAT FULLSCREEN =================
+var watermarkDiv = document.createElement('div');
+watermarkDiv.className = 'custom-watermark';
+watermarkDiv.innerHTML = 'Virtual Office - Media Tulisan Manusia';
+document.getElementById('panorama').appendChild(watermarkDiv);
+
+function checkFullscreen() {
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if(isFullscreen) {
+        watermarkDiv.style.display = 'block'; 
+    } else {
+        watermarkDiv.style.display = 'none';  
+    }
+}
+
+document.addEventListener('fullscreenchange', checkFullscreen);
+document.addEventListener('webkitfullscreenchange', checkFullscreen);
+document.addEventListener('mozfullscreenchange', checkFullscreen);
+document.addEventListener('MSFullscreenChange', checkFullscreen);
+
 </script>
 
 </body>
 </html>
+

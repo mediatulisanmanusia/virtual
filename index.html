@@ -46,39 +46,54 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL NAVIGASI KIRI ATAS (HANYA FULLSCREEN & SENSOR GERAK) ================= */
-        /* Mengatur posisi utama grup di pojok kiri atas */
+        /* ================= KONTROL NAVIGASI KIRI ATAS ================= */
         .pnlm-controls-container {
             top: 20px !important; 
             left: 20px !important; 
             z-index: 99999 !important;
+            position: absolute !important;
         }
 
-        /* Menghilangkan background transparan bawaan yang membuat kotak menyambung */
+        /* Menghilangkan background transparan bawaan pannellum */
         .pnlm-controls {
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
         }
 
-        /* Desain Kaca Putih untuk masing-masing ikon tombol */
+        /* ================= DESAIN KACA PUTIH UNTUK TOMBOL ================= */
         .pnlm-control {
-            background-color: rgba(255, 255, 255, 0.8) !important; /* Kaca keputihan agar ikon hitam jelas */
+            background-image: none !important; /* MATIKAN GAMBAR BAWAAN PANNELLUM AGAR TIDAK ERROR */
+            background-color: rgba(255, 255, 255, 0.8) !important;
             backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
             border: 1px solid rgba(255, 255, 255, 0.9) !important;
-            border-radius: 6px !important;
+            border-radius: 8px !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
             transition: all 0.2s ease !important;
+            width: 32px !important; /* Agak dibesarkan sedikit agar nyaman di HP */
+            height: 32px !important;
         }
         .pnlm-control:hover { background-color: rgba(255, 255, 255, 1) !important; }
 
-        /* Koordinat posisi tombol agar presisi (jarak antar tombol 14px) */
-        .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; }
-        .pnlm-orientation-controls { top: 40px !important; left: 0 !important; margin-top: 0 !important; }
+        /* Koordinat posisi tombol presisi (jarak antar tombol 10px) */
+        .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; width: 32px !important; height: 32px !important; }
+        .pnlm-orientation-controls { top: 42px !important; left: 0 !important; margin-top: 0 !important; width: 32px !important; height: 32px !important; }
 
-        /* Memperjelas ikon hitam bawaan */
-        .pnlm-fullscreen-toggle-button, .pnlm-orientation-button { 
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)) !important; 
+        /* ================= INJEKSI IKON VEKTOR MANUAL (KAMERA & LINGKARAN HITAM) ================= */
+        /* 1. Ikon KAMERA untuk Fullscreen */
+        .pnlm-fullscreen-toggle-button, .pnlm-fullscreen-toggle-button-active, .pnlm-fullscreen-toggle-button-inactive {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M4 6h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm8 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'/%3E%3C/svg%3E") !important;
+            background-size: 18px 18px !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        /* 2. Ikon LINGKARAN untuk Sensor Gerak (Gyroscope) */
+        .pnlm-orientation-button, .pnlm-orientation-button-active, .pnlm-orientation-button-inactive {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3' fill='black'/%3E%3C/svg%3E") !important;
+            background-size: 18px 18px !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
         }
 
         /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
@@ -257,15 +272,16 @@
 </div>
 
 <script>
-// ================= INIT PANNELLUM (Tombol Zoom + & - DIHILANGKAN, KECEPATAN DITINGKATKAN) =================
+// ================= INIT PANNELLUM =================
+// ZOOM CTRL DIMATIKAN, TRANISI SUPER CEPAT (250ms)
 var viewer = pannellum.viewer('panorama', {
     "default": {
         "firstScene": "depan",
         "author": "Media Tulisan Manusia", 
-        "sceneFadeDuration": 250, /* SANGAT CEPAT */
+        "sceneFadeDuration": 250, 
         "autoLoad": true, 
         "compass": false,
-        "showZoomCtrl": false, /* INI YANG MENGHILANGKAN TOMBOL + DAN - SECARA BERSIH */
+        "showZoomCtrl": false, /* Mematikan tombol + dan - secara permanen dari sistem */
         "autoRotate": -1.5, 
         "autoRotateInactivityDelay": 4000,
         "hfov": 100,
@@ -322,7 +338,7 @@ var viewer = pannellum.viewer('panorama', {
     }
 });
 
-// MEMASUKKAN UI KITA KE DALAM KANVAS PANNELLUM SECARA PAKSA AGAR ANTI-HILANG
+// MEMASUKKAN UI KITA KE DALAM KANVAS PANNELLUM SECARA PAKSA AGAR ANTI-HILANG SAAT FULLSCREEN
 setTimeout(function() {
     var pnlmContainer = document.querySelector('.pnlm-container');
     if(pnlmContainer) {
@@ -395,7 +411,7 @@ function submitGuestbook(event) {
     .then(response => response.json())
     .then(data => {
         btn.innerHTML = 'Selamat Datang!';
-        setTimeout(closeGuestbook, 150); /* Dipercepat, langsung tutup saat berhasil */
+        setTimeout(closeGuestbook, 150); /* Dipercepat, langsung tutup dalam 0.15 detik! */
     })
     .catch(error => {
         btn.innerHTML = 'Selamat Datang!';

@@ -8,9 +8,56 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: #000; font-family: 'Segoe UI', sans-serif; }
-        #panorama { width: 100vw; height: 100vh; }
+        
+        #panorama { width: 100vw; height: 100vh; transform: translateZ(0); will-change: transform; }
 
-        /* TOMBOL MUSIK (Glassmorphism) */
+        /* ================= ANIMASI LOADING CEPAT ================= */
+        .pnlm-load-box p, .pnlm-lbox { display: none !important; }
+        .pnlm-load-box {
+            background: transparent !important;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; border: none !important;
+        }
+        .pnlm-load-box::after {
+            content: ""; display: block; width: 50px; height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #ffffff; border-radius: 50%;
+            animation: spinFast 0.8s linear infinite; margin: 0 auto;
+        }
+        @keyframes spinFast { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* HILANGKAN IKON BAWAAN (BINTIK) */
+        .pnlm-hotspot-base { background-color: transparent !important; border-radius: 0 !important; }
+        .pnlm-hotspot { background: none !important; }
+        .pnlm-tooltip { display: none !important; }
+
+        /* ================= BUKU TAMU MODAL ================= */
+        #guestbook-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); z-index: 999999; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .guestbook-content {
+            background: rgba(20, 20, 20, 0.95); padding: 30px; border-radius: 16px; width: 300px;
+            border: 2px solid #555; text-align: center; position: relative; color: #fff;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        .gb-close { position: absolute; top: 12px; right: 18px; cursor: pointer; color: #aaa; font-size: 22px; font-weight: bold; }
+        .gb-close:hover { color: #fff; }
+        .guestbook-content h3 { margin: 0 0 5px 0; font-size: 18px; }
+        .guestbook-content p { margin: 0 0 20px 0; font-size: 12px; color: #ccc; }
+        .gb-input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #666;
+            background: #111; color: #fff; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;
+        }
+        .gb-input:focus { outline: none; border-color: #fff; }
+        .gb-btn {
+            width: 100%; padding: 12px; background: #fff; color: #000; border: none; border-radius: 8px;
+            font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px;
+        }
+        .gb-btn:hover { background: #ddd; transform: translateY(-2px); }
+
+        /* ================= TOMBOL MUSIK ================= */
         .music-btn {
             position: absolute; top: 20px; right: 20px; z-index: 9999;
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -21,66 +68,77 @@
         }
         .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
 
-        /* ICON KLIK LAYANAN (Bulat Emas 3D) */
-        .custom-info-icon {
-            width: 42px; height: 42px; 
-            background: linear-gradient(135deg, #ffd700, #b8860b); 
-            color: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.6); 
-            border: 2px solid #fff; transition: transform 0.2s; pointer-events: auto;
+        /* MODAL / POPUP WEB */
+        #web-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); z-index: 99999; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
         }
-        .custom-info-icon:hover { transform: scale(1.15); }
+        .modal-content {
+            width: 85vw; height: 85vh; background: #fff; border-radius: 12px; overflow: hidden;
+            border: 3px solid #000; box-shadow: 0 25px 50px rgba(255,255,255,0.2); display: flex; flex-direction: column;
+        }
+        .modal-header {
+            background: #000; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;
+            color: #fff; font-weight: bold; font-size: 15px; border-bottom: 2px solid #555;
+        }
+        .close-modal { cursor: pointer; color: #fff; font-size: 22px; font-weight: bold; transition: color 0.2s; }
+        .close-modal:hover { color: #ccc; }
+        .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* DESAIN GELEMBUNG 3D - TRANSPARAN & GRADASI EMAS */
-        .custom-card {
-            display: none; 
-            position: absolute; bottom: 60px; left: -110px;
-            background: rgba(20, 20, 20, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 18px 22px; 
-            border-radius: 18px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(212,175,55,0.3); 
-            border: 2px solid transparent;
-            background-image: linear-gradient(rgba(20, 20, 20, 0.55), rgba(20, 20, 20, 0.55)), linear-gradient(135deg, #ffd700, #85581a);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            width: 260px; text-align: left;
-            color: #fff; pointer-events: auto;
-            cursor: default;
+        /* DESAIN IKON VEKTOR MURNI (TANPA LATAR BELAKANG) */
+        .clean-icon-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; pointer-events: auto; transition: all 0.2s;
         }
-        .custom-card.show { display: block; animation: popUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .clean-icon-btn:hover { transform: translateY(-4px) scale(1.15); }
+        .clean-icon-btn svg { 
+            width: 38px; height: 38px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; 
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,1));
+        }
+        .icon-label {
+            color: #ffffff; font-size: 12px; font-weight: 800; margin-top: 6px;
+            text-shadow: 1px 1px 3px #000, -1px -1px 3px #000, 1px -1px 3px #000, -1px 1px 3px #000;
+            text-align: center; white-space: nowrap; pointer-events: none;
+        }
+
+        .icon-arrow-up svg { animation: moveUp 1.5s infinite ease-in-out; }
+        @keyframes moveUp { 0%, 100% { transform: translateY(4px); } 50% { transform: translateY(-4px); } }
+
+        .icon-glow svg { animation: pulseGlow 2.5s infinite ease-in-out; }
+        @keyframes pulseGlow { 
+            0%, 100% { filter: drop-shadow(0 3px 6px rgba(0,0,0,1)); } 
+            50% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)) drop-shadow(0 3px 6px rgba(0,0,0,1)); } 
+        }
+
+        /* GELEMBUNG INFORMASI 3D */
+        .custom-card {
+            display: none; position: absolute; bottom: 70px; left: -110px; background: #ffffff;
+            padding: 18px 22px; border-radius: 12px; width: 260px; text-align: left;
+            color: #000; pointer-events: auto; cursor: default; border: 3px solid #000;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.7), 0 15px 30px rgba(0,0,0,0.4);
+            background-image: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%); z-index: 9999;
+        }
+        .custom-card.show { display: block; animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes popUp { from { opacity: 0; transform: translateY(15px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Tombol Tutup (X) */
-        .close-card { float: right; cursor: pointer; color: #aaa; font-size: 18px; font-weight: bold; line-height: 1; margin-left: 10px; transition: color 0.2s; }
-        .close-card:hover { color: #ffd700; }
-
-        .custom-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #ffd700; font-weight: 700; width: 85%; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .custom-card p { margin: 0 0 12px 0; font-size: 12px; color: #e0e0e0; line-height: 1.5; font-weight: 400; }
+        .close-card { float: right; cursor: pointer; color: #000; font-size: 20px; font-weight: bold; line-height: 1; }
+        .close-card:hover { color: #555; }
+        .custom-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #000; font-weight: 800; border-bottom: 2px solid #000; padding-bottom: 5px; }
+        .custom-card p { margin: 0 0 12px 0; font-size: 13px; color: #333; line-height: 1.5; font-weight: 500; }
         
         .card-link {
-            display: block; background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; padding: 8px 12px;
-            border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 8px; 
-            border: 1px solid rgba(255, 215, 0, 0.3); transition: all 0.2s;
+            display: block; background: #fff; color: #000; text-decoration: none; padding: 8px 12px;
+            border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-align: center;
+            border: 2px solid #000; box-shadow: 3px 3px 0 #000; transition: all 0.1s;
         }
-        .card-link:hover { background: #ffd700; color: #111; border-color: #ffd700; }
-        
+        .card-link:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; background: #e0e0e0; }
         .wa-button {
-            display: inline-flex; align-items: center; background: #25d366; color: white; text-decoration: none;
-            padding: 7px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; gap: 6px; 
-            box-shadow: 0 4px 10px rgba(37,211,102,0.4); transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center; background: #000; color: #fff; text-decoration: none;
+            padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; gap: 6px; 
+            border: 2px solid #000; box-shadow: 3px 3px 0 rgba(0,0,0,0.5); transition: all 0.1s;
         }
-        .wa-button:hover { background: #1ebe57; transform: scale(1.05); }
-
-        /* ICON LOGO CUSTOM */
-        .custom-logo-icon {
-            width: 48px; height: 48px; background-image: url('lg1.png'); background-size: contain; background-repeat: no-repeat; 
-            background-position: center; cursor: pointer; filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6)); transition: transform 0.2s;
-        }
-        .custom-logo-icon:hover { transform: scale(1.15); }
+        .wa-button:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.5); background: #333; }
     </style>
 </head>
 <body>
@@ -93,9 +151,35 @@
 <!-- Tombol Musik -->
 <button id="music-btn" class="music-btn">🎵 Putar Musik</button>
 
+<!-- Modal Buku Tamu -->
+<div id="guestbook-modal">
+    <div class="guestbook-content">
+        <span class="gb-close" onclick="closeGuestbook()">&times;</span>
+        <h3>Buku Tamu</h3>
+        <p>Silakan isi daftar hadir pengunjung</p>
+        <form id="gb-form" onsubmit="submitGuestbook(event)">
+            <input type="text" id="gb-nama" class="gb-input" placeholder="Nama Anda" required>
+            <input type="email" id="gb-email" class="gb-input" placeholder="Email Anda" required>
+            <button type="submit" id="gb-btn" class="gb-btn">Masuk</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Preview Website -->
+<div id="web-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Situs Resmi: Media Tulisan Manusia</span>
+            <span class="close-modal" onclick="closeWebModal()">&times;</span>
+        </div>
+        <iframe id="web-iframe" class="modal-iframe" src=""></iframe>
+    </div>
+</div>
+
 <div id="panorama"></div>
 
 <script>
+// ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");
 var musicBtn = document.getElementById("music-btn");
 var isPlaying = false;
@@ -112,39 +196,119 @@ musicBtn.addEventListener("click", function() {
     }
 });
 
-function customInteractiveTooltip(hotSpotDiv, args) {
-    hotSpotDiv.style.width = '42px';
-    hotSpotDiv.style.height = '42px';
-    hotSpotDiv.style.pointerEvents = 'none';
+// ================= LOGIKA BUKU TAMU (Otomatis Kirim ke Email) =================
+window.onload = function() {
+    // Munculkan formulir otomatis saat web dibuka
+    document.getElementById('guestbook-modal').style.display = 'flex';
+};
+
+function closeGuestbook() {
+    document.getElementById('guestbook-modal').style.display = 'none';
+}
+
+function submitGuestbook(event) {
+    event.preventDefault(); // Cegah pindah halaman
+    var btn = document.getElementById('gb-btn');
+    var nama = document.getElementById('gb-nama').value;
+    var email = document.getElementById('gb-email').value;
+    btn.innerHTML = 'Mengirim...';
+    
+    // AJAX Kirim ke FormSubmit
+    fetch("https://formsubmit.co/ajax/ptmediatulisanmanusia@gmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: "Pengunjung-Virtual",
+            Nama: nama,
+            Email: email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        btn.innerHTML = 'Berhasil Masuk!';
+        setTimeout(closeGuestbook, 1000);
+    })
+    .catch(error => {
+        btn.innerHTML = 'Berhasil Masuk!';
+        setTimeout(closeGuestbook, 1000);
+    });
+}
+
+// ================= LOGIKA WEB POP-UP =================
+function openWebModal(url) {
+    document.getElementById("web-iframe").src = url;
+    document.getElementById("web-modal").style.display = "flex";
+}
+function closeWebModal() {
+    document.getElementById("web-modal").style.display = "none";
+    document.getElementById("web-iframe").src = "";
+}
+
+// ================= FUNGSI IKON PANNELLUM =================
+function customMsgTooltip(hotSpotDiv, args) {
+    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
 
     var iconBtn = document.createElement('div');
-    iconBtn.className = 'custom-info-icon';
-    iconBtn.innerHTML = 'i';
+    iconBtn.className = 'clean-icon-btn icon-glow';
+    iconBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+    iconBtn.innerHTML += '<div class="icon-label">Info</div>'; 
 
     var cardDiv = document.createElement('div');
     cardDiv.className = 'custom-card';
     cardDiv.innerHTML = "<span class='close-card'>&times;</span>" + args;
 
     iconBtn.onclick = function(e) {
-        var allCards = document.querySelectorAll('.custom-card');
-        allCards.forEach(c => { if(c !== cardDiv) c.classList.remove('show'); });
-        cardDiv.classList.toggle('show');
-        e.stopPropagation();
+        document.querySelectorAll('.custom-card').forEach(c => { if(c !== cardDiv) c.classList.remove('show'); });
+        cardDiv.classList.toggle('show'); e.stopPropagation();
     };
+    cardDiv.querySelector('.close-card').onclick = function(e) { cardDiv.classList.remove('show'); e.stopPropagation(); };
+    cardDiv.onmousedown = function(e) { e.stopPropagation(); }; cardDiv.ontouchstart = function(e) { e.stopPropagation(); };
 
-    var closeBtn = cardDiv.querySelector('.close-card');
-    closeBtn.onclick = function(e) {
-        cardDiv.classList.remove('show');
-        e.stopPropagation();
-    };
-
-    cardDiv.onmousedown = function(e) { e.stopPropagation(); };
-    cardDiv.ontouchstart = function(e) { e.stopPropagation(); };
-
-    hotSpotDiv.appendChild(iconBtn);
-    hotSpotDiv.appendChild(cardDiv);
+    hotSpotDiv.appendChild(iconBtn); hotSpotDiv.appendChild(cardDiv);
 }
 
+function customArrowTooltip(hotSpotDiv, label) {
+    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
+    
+    var arrowBtn = document.createElement('div');
+    arrowBtn.className = 'clean-icon-btn icon-arrow-up';
+    arrowBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>';
+    if(label) { arrowBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
+    
+    hotSpotDiv.appendChild(arrowBtn);
+}
+
+function customDoorTooltip(hotSpotDiv, label) {
+    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
+    
+    var doorBtn = document.createElement('div');
+    doorBtn.className = 'clean-icon-btn icon-glow';
+    doorBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 20V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v15"></path><path d="M2 20h20"></path><path d="M14 12v.01"></path></svg>';
+    if(label) { doorBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
+    
+    hotSpotDiv.appendChild(doorBtn);
+}
+
+function customWebLink(hotSpotDiv, label) {
+    hotSpotDiv.style.width = '70px'; hotSpotDiv.style.height = '70px'; 
+    hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
+    
+    var webBtn = document.createElement('div');
+    webBtn.className = 'clean-icon-btn icon-glow';
+    webBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+    if(label) { webBtn.innerHTML += '<div class="icon-label">' + label + '</div>'; }
+    
+    webBtn.onclick = function() { openWebModal("https://mediatulisanmanusia.online"); };
+    hotSpotDiv.appendChild(webBtn);
+}
+
+// ================= INIT PANNELLUM =================
 var viewer = pannellum.viewer('panorama', {
     "default": {
         "firstScene": "depan",
@@ -152,98 +316,59 @@ var viewer = pannellum.viewer('panorama', {
         "sceneFadeDuration": 1500, 
         "autoLoad": true, 
         "compass": false,
-        "autoRotate": -2, 
-        "autoRotateInactivityDelay": 3000
+        "autoRotate": -1.5, 
+        "autoRotateInactivityDelay": 4000,
+        "hfov": 100,
+        "inertia": 15
     },
 
     "scenes": {
         "depan": {
             "panorama": "g6.png",
             "hotSpots": [
-                { "pitch": -56.7, "yaw": 8.2, "type": "scene", "text": "Masuk ke Ruang Tunggu", "sceneId": "keseluruhan" }
+                { "pitch": -26.2, "yaw": 1.4, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk Kantor" }
             ]
         },
-
         "keseluruhan": {
             "panorama": "g1.png",
             "hotSpots": [
-                {
-                    "pitch": -10.0, "yaw": 15.0, 
-                    "type": "info",
-                    "createTooltipFunc": customInteractiveTooltip,
-                    "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office PT Media Tulisan Manusia.</p><a href='https://mediatulisanmanusia.online' target='_blank' class='card-link'>🌐 Situs Resmi Kami</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
-                },
-                { "pitch": -23.0, "yaw": 50.4, "type": "scene", "text": "Maju ke Meja Resepsionis", "sceneId": "resepsionis" },
-                { "pitch": -38.5, "yaw": 2.7, "type": "scene", "text": "Keluar Kantor", "sceneId": "depan" }
+                { "pitch": -8.2, "yaw": 27.2, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online\"); return false;' class='card-link'>🌐 Lihat Situs Resmi</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>" },
+                { "pitch": -8.6, "yaw": 156.8, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ke Resepsionis" },
+                { "pitch": -7.4, "yaw": -57.7, "type": "scene", "sceneId": "depan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Keluar" }
             ]
         },
-
         "resepsionis": {
             "panorama": "g2.png",
             "hotSpots": [
-                {
-                    "pitch": 1.6, "yaw": 49.4,
-                    "type": "info",
-                    "createTooltipFunc": customInteractiveTooltip,
-                    "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Selamat datang, mari amankan legalitas karya cipta Anda bersama kami.</p><a href='https://mediatulisanmanusia.online/kategori.pdf' target='_blank' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
-                },
-                {
-                    "pitch": -6.9, "yaw": 16.3,
-                    "type": "info",
-                    "createTooltipFunc": customInteractiveTooltip,
-                    "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Selamat datang, wujudkan buku impian Anda dengan layanan profesional kami.</p><a href='https://mediatulisanmanusia.online/ketentuan.pdf' target='_blank' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
-                },
-                {
-                    "pitch": 31.3, "yaw": -8.4,
-                    "cssClass": "custom-logo-icon",
-                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
-                },
-                { "pitch": -28.4, "yaw": -42.3, "type": "scene", "text": "Masuk ke Ruang Literasi", "sceneId": "literasi" },
-                { "pitch": -42.1, "yaw": -124.7, "type": "scene", "text": "Masuk ke Ruang Rapat", "sceneId": "rapat" },
-                { "pitch": -35.8, "yaw": 100.7, "type": "scene", "text": "Menuju Ruang Eksekutif", "sceneId": "lorong" },
-                { "pitch": -29.4, "yaw": 177.2, "type": "scene", "text": "Mundur ke Ruang Tunggu", "sceneId": "keseluruhan" }
+                { "pitch": -13.1, "yaw": -10.7, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Amankan legalitas karya cipta Anda bersama kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/kategori.pdf\"); return false;' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
+                { "pitch": -6.9, "yaw": 16.3, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Wujudkan buku impian Anda dengan kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/ketentuan.pdf\"); return false;' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
+                { "pitch": -33.5, "yaw": 6.4, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
+                { "pitch": -28.9, "yaw": -107.0, "type": "scene", "sceneId": "literasi", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Literasi" },
+                { "pitch": -4.1, "yaw": -40.2, "type": "scene", "sceneId": "rapat", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Rapat" },
+                { "pitch": -13.5, "yaw": 56.8, "type": "scene", "sceneId": "lorong", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ruang Eksekutif" },
+                { "pitch": -13.3, "yaw": 178.7, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Ruang Tunggu" }
             ]
         },
-
         "literasi": {
             "panorama": "g3.png",
             "hotSpots": [
-                {
-                    "pitch": 20.0, "yaw": 0.0,
-                    "cssClass": "custom-logo-icon",
-                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
-                },
-                { "pitch": -40.9, "yaw": 178.6, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customWebLink, "createTooltipArgs": "Buka Website" },
+                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         },
-
         "rapat": {
             "panorama": "g4.png",
             "hotSpots": [
-                {
-                    "pitch": 25.0, "yaw": 90.0,
-                    "cssClass": "custom-logo-icon",
-                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
-                },
-                { "pitch": -40.6, "yaw": -159.9, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+                { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
+                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         },
-
         "lorong": {
             "panorama": "g5.png",
             "hotSpots": [
-                {
-                    "pitch": -10.0, "yaw": 20.0,
-                    "type": "info",
-                    "createTooltipFunc": customInteractiveTooltip,
-                    "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>"
-                },
-                {
-                    "pitch": 25.0, "yaw": 40.0,
-                    "cssClass": "custom-logo-icon",
-                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
-                },
-                { "pitch": -53.1, "yaw": -133.5, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+                { "pitch": -10.0, "yaw": 20.0, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>" },
+                { "pitch": -2.1, "yaw": 36.6, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
+                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
             ]
         }
     }

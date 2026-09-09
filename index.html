@@ -46,40 +46,50 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL PANNELLUM (+, -, Fullscreen, Gyro) TATA LETAK SUPER PRESISI ================= */
-        /* Hapus kotak transparan nyambung bawaan pannellum */
+        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK SUPER PRESISI & OTOMATIS ================= */
+        /* Kembalikan kontainer bawaan agar posisinya mutlak di pojok kiri atas */
+        .pnlm-controls-container {
+            position: absolute !important;
+            top: 20px !important;
+            left: 20px !important;
+            z-index: 99999 !important;
+        }
+
+        /* Hilangkan kotak latar gelap bawaan Pannellum (Grup Pembungkus) */
         .pnlm-controls {
+            position: static !important; /* Biarkan tombol menumpuk secara alami ke bawah */
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important; padding: 0 !important;
         }
 
-        /* Desain Kaca Putih Terpisah untuk setiap ikon hitam bawaan */
+        /* Modifikasi setiap Tombol secara individu menjadi kotak kaca putih */
         .pnlm-control {
-            background-color: rgba(255, 255, 255, 0.7) !important; /* Dibuat lebih putih agar ikon hitam jelas */
+            position: relative !important; /* Buang posisi absolut agar sejajar lurus */
+            top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+            display: block; /* PENTING: Jangan pakai !important agar sistem bisa menyembunyikan jika HP tdk dukung */
+            margin: 0 0 10px 0 !important; /* Jarak pas 10px ke bawah untuk setiap tombol */
+            width: 26px !important; height: 26px !important; /* WAJIB 26x26 agar gambar ikon pas muncul */
+            background-color: rgba(255, 255, 255, 0.75) !important; /* Latar kaca putih bersih */
             backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.9) !important;
-            border-radius: 8px !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+            border: none !important; /* WAJIB NONE agar gambar ikon tidak meleset/hilang */
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 4px 10px rgba(0,0,0,0.3) !important; /* Garis tepi pakai shadow agar ukurannya utuh */
+            border-radius: 6px !important;
             transition: all 0.2s ease !important;
-            /* Jangan merubah ukuran ini agar ikon hitam tidak hilang (26x26 adalah bawaan asli) */
         }
         .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.95) !important; }
 
-        /* Koordinat posisi absolut agar sejajar lurus dengan jarak pas 12px antar kotak */
-        .pnlm-zoom-controls { top: 20px !important; left: 20px !important; }
-        .pnlm-zoom-in { position: absolute !important; top: 0 !important; left: 0 !important; }
-        .pnlm-zoom-out { position: absolute !important; top: 38px !important; left: 0 !important; } /* Jarak 12px dari tombol + */
-
-        .pnlm-fullscreen-controls { top: 96px !important; left: 20px !important; right: auto !important; margin: 0 !important; } /* Jarak 12px dari tombol - */
-        .pnlm-orientation-controls { top: 134px !important; left: 20px !important; right: auto !important; margin: 0 !important; } /* Jarak 12px dari tombol fullscreen */
+        /* Pertajam Ikon Hitam di dalam kotak kaca */
+        .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle-button, .pnlm-orientation-button { 
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)) !important; 
+        }
 
         /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
         .custom-watermark {
             display: none; 
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); /* Dipindah ke ATAS agar bebas notif hitam Android */
-            z-index: 999999; pointer-events: none;
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 99999; pointer-events: none;
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -90,19 +100,7 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* ================= TOMBOL MUSIK LEBIH KECIL (34px) ================= */
-        .music-btn {
-            position: absolute; top: 20px; right: 20px; z-index: 999999;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 1);
-            width: 34px; height: 34px; border-radius: 10px;
-            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
-            display: flex; align-items: center; justify-content: center; padding: 0;
-        }
-        .music-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
-        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
-
-        /* ================= BUKU TAMU MODAL PRESISI ================= */
+        /* ================= BUKU TAMU MODAL (PRESISI 100%) ================= */
         #guestbook-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6); z-index: 9999999; 
@@ -145,6 +143,18 @@
         }
         .gb-btn:hover { background: #eeeeee !important; transform: translateY(-2px) !important; box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important; }
 
+        /* ================= TOMBOL MUSIK LEBIH KECIL ================= */
+        .music-btn {
+            position: absolute; top: 20px; right: 20px; z-index: 999999;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 1);
+            width: 34px; height: 34px; border-radius: 10px;
+            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; padding: 0;
+        }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
+        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
+
         /* MODAL / POPUP WEB */
         #web-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -163,7 +173,7 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* ================= DESAIN IKON HOTSPOT & KETERANGAN (Skala Mini & Transparansi 70%) ================= */
+        /* ================= DESAIN IKON HOTSPOT (Arah, Info) ================= */
         .clean-icon-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; pointer-events: auto; transition: all 0.2s;
@@ -216,11 +226,9 @@
 
 <!-- ELEMEN INI DIAMANKAN AGAR MUNCUL SAAT FULLSCREEN -->
 <div id="ui-container">
-    <!-- Tombol Musik -->
     <button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
         <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
     </button>
-    <!-- Watermark Atas Tengah -->
     <div class="custom-watermark" id="watermark">Virtual Office - Media Tulisan Manusia</div>
 </div>
 
@@ -317,14 +325,14 @@ var viewer = pannellum.viewer('panorama', {
     }
 });
 
-// MEMASUKKAN UI KITA KE DALAM KANVAS PANNELLUM SECARA PAKSA (AGAR ANTI-HILANG SAAT FULLSCREEN)
+// MEMASUKKAN UI KITA KE DALAM KANVAS PANNELLUM SECARA PAKSA AGAR ANTI-HILANG
 setTimeout(function() {
     var pnlmContainer = document.querySelector('.pnlm-container');
     if(pnlmContainer) {
         pnlmContainer.appendChild(document.getElementById('music-btn'));
         pnlmContainer.appendChild(document.getElementById('watermark'));
     }
-}, 1000); // Delay 1 detik untuk memastikan pannellum sudah selesai merender kanvasnya
+}, 1000); 
 
 // ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");

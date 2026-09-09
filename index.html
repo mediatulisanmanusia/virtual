@@ -46,43 +46,39 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK SUPER PRESISI & OTOMATIS ================= */
-        /* Kembalikan kontainer bawaan agar posisinya mutlak di pojok kiri atas */
+        /* ================= KONTROL NAVIGASI KIRI ATAS (HANYA FULLSCREEN & SENSOR GERAK) ================= */
+        /* Mengatur posisi utama grup di pojok kiri atas */
         .pnlm-controls-container {
-            position: absolute !important;
-            top: 20px !important;
-            left: 20px !important;
+            top: 20px !important; 
+            left: 20px !important; 
             z-index: 99999 !important;
         }
 
-        /* Hilangkan kotak latar gelap bawaan Pannellum (Grup Pembungkus) */
+        /* Menghilangkan background transparan bawaan yang membuat kotak menyambung */
         .pnlm-controls {
-            position: static !important; /* Biarkan tombol menumpuk secara alami ke bawah */
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-            margin: 0 !important; padding: 0 !important;
         }
 
-        /* Modifikasi setiap Tombol secara individu menjadi kotak kaca putih */
+        /* Desain Kaca Putih untuk masing-masing ikon tombol */
         .pnlm-control {
-            position: relative !important; /* Buang posisi absolut agar sejajar lurus */
-            top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
-            display: block; /* PENTING: Jangan pakai !important agar sistem bisa menyembunyikan jika HP tdk dukung */
-            margin: 0 0 10px 0 !important; /* Jarak pas 10px ke bawah untuk setiap tombol */
-            width: 26px !important; height: 26px !important; /* WAJIB 26x26 agar gambar ikon pas muncul */
-            background-color: rgba(255, 255, 255, 0.75) !important; /* Latar kaca putih bersih */
-            backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
-            border: none !important; /* WAJIB NONE agar gambar ikon tidak meleset/hilang */
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 4px 10px rgba(0,0,0,0.3) !important; /* Garis tepi pakai shadow agar ukurannya utuh */
+            background-color: rgba(255, 255, 255, 0.8) !important; /* Kaca keputihan agar ikon hitam jelas */
+            backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
             border-radius: 6px !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
             transition: all 0.2s ease !important;
         }
-        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.95) !important; }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 1) !important; }
 
-        /* Pertajam Ikon Hitam di dalam kotak kaca */
-        .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle-button, .pnlm-orientation-button { 
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)) !important; 
+        /* Koordinat posisi tombol agar presisi (jarak antar tombol 14px) */
+        .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; }
+        .pnlm-orientation-controls { top: 40px !important; left: 0 !important; margin-top: 0 !important; }
+
+        /* Memperjelas ikon hitam bawaan */
+        .pnlm-fullscreen-toggle-button, .pnlm-orientation-button { 
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)) !important; 
         }
 
         /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
@@ -261,14 +257,15 @@
 </div>
 
 <script>
-// ================= INIT PANNELLUM =================
+// ================= INIT PANNELLUM (Tombol Zoom + & - DIHILANGKAN, KECEPATAN DITINGKATKAN) =================
 var viewer = pannellum.viewer('panorama', {
     "default": {
         "firstScene": "depan",
         "author": "Media Tulisan Manusia", 
-        "sceneFadeDuration": 800, 
+        "sceneFadeDuration": 250, /* SANGAT CEPAT */
         "autoLoad": true, 
         "compass": false,
+        "showZoomCtrl": false, /* INI YANG MENGHILANGKAN TOMBOL + DAN - SECARA BERSIH */
         "autoRotate": -1.5, 
         "autoRotateInactivityDelay": 4000,
         "hfov": 100,
@@ -398,11 +395,11 @@ function submitGuestbook(event) {
     .then(response => response.json())
     .then(data => {
         btn.innerHTML = 'Selamat Datang!';
-        setTimeout(closeGuestbook, 800);
+        setTimeout(closeGuestbook, 150); /* Dipercepat, langsung tutup saat berhasil */
     })
     .catch(error => {
         btn.innerHTML = 'Selamat Datang!';
-        setTimeout(closeGuestbook, 800);
+        setTimeout(closeGuestbook, 150);
     });
 }
 

@@ -54,33 +54,31 @@
             position: absolute !important;
         }
 
-        /* Menghilangkan background transparan bawaan pannellum */
         .pnlm-controls {
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
         }
 
-        /* ================= DESAIN KACA PUTIH UNTUK TOMBOL ================= */
+        /* ================= DESAIN KACA TRANSPARAN (DIUBAH AGAR SAMA DENGAN TOMBOL LAIN) ================= */
         .pnlm-control {
-            background-image: none !important; /* MATIKAN GAMBAR BAWAAN PANNELLUM AGAR TIDAK ERROR */
-            background-color: rgba(255, 255, 255, 0.8) !important;
+            background-image: none !important; 
+            background-color: rgba(255, 255, 255, 0.15) !important; /* <-- Lebih transparan, sama seperti hotspot/musik */
             backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important; /* Disesuaikan agar sama */
             border-radius: 8px !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
             transition: all 0.2s ease !important;
-            width: 32px !important; /* Agak dibesarkan sedikit agar nyaman di HP */
-            height: 32px !important;
+            width: 34px !important; /* <-- Ukuran disamakan persis dengan ukuran tombol musik */
+            height: 34px !important;
         }
-        .pnlm-control:hover { background-color: rgba(255, 255, 255, 1) !important; }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.3) !important; }
 
         /* Koordinat posisi tombol presisi (jarak antar tombol 10px) */
-        .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; width: 32px !important; height: 32px !important; }
-        .pnlm-orientation-controls { top: 42px !important; left: 0 !important; margin-top: 0 !important; width: 32px !important; height: 32px !important; }
+        .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; width: 34px !important; height: 34px !important; }
+        .pnlm-orientation-controls { top: 44px !important; left: 0 !important; margin-top: 0 !important; width: 34px !important; height: 34px !important; }
 
         /* ================= INJEKSI IKON VEKTOR MANUAL (KAMERA & LINGKARAN HITAM) ================= */
-        /* 1. Ikon KAMERA untuk Fullscreen */
         .pnlm-fullscreen-toggle-button, .pnlm-fullscreen-toggle-button-active, .pnlm-fullscreen-toggle-button-inactive {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M4 6h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm8 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'/%3E%3C/svg%3E") !important;
             background-size: 18px 18px !important;
@@ -88,12 +86,16 @@
             background-repeat: no-repeat !important;
         }
 
-        /* 2. Ikon LINGKARAN untuk Sensor Gerak (Gyroscope) */
         .pnlm-orientation-button, .pnlm-orientation-button-active, .pnlm-orientation-button-inactive {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3' fill='black'/%3E%3C/svg%3E") !important;
             background-size: 18px 18px !important;
             background-position: center !important;
             background-repeat: no-repeat !important;
+        }
+
+        /* Memperjelas ikon hitam di atas kaca transparan */
+        .pnlm-fullscreen-toggle-button, .pnlm-orientation-button { 
+            filter: drop-shadow(0 2px 3px rgba(255,255,255,0.7)) !important; /* Efek highlight putih sedikit agar ikon hitam terbaca walau kaca bening */
         }
 
         /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
@@ -154,16 +156,16 @@
         }
         .gb-btn:hover { background: #eeeeee !important; transform: translateY(-2px) !important; box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important; }
 
-        /* ================= TOMBOL MUSIK LEBIH KECIL ================= */
+        /* ================= TOMBOL MUSIK ================= */
         .music-btn {
             position: absolute; top: 20px; right: 20px; z-index: 999999;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 1);
-            width: 34px; height: 34px; border-radius: 10px;
-            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4); color: rgba(255, 255, 255, 0.9);
+            width: 34px; height: 34px; border-radius: 8px; /* Disesuaikan dgn tombol lain */
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.2s ease;
             display: flex; align-items: center; justify-content: center; padding: 0;
         }
-        .music-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
         .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
 
         /* MODAL / POPUP WEB */
@@ -273,7 +275,6 @@
 
 <script>
 // ================= INIT PANNELLUM =================
-// ZOOM CTRL DIMATIKAN, TRANISI SUPER CEPAT (250ms)
 var viewer = pannellum.viewer('panorama', {
     "default": {
         "firstScene": "depan",
@@ -281,7 +282,7 @@ var viewer = pannellum.viewer('panorama', {
         "sceneFadeDuration": 250, 
         "autoLoad": true, 
         "compass": false,
-        "showZoomCtrl": false, /* Mematikan tombol + dan - secara permanen dari sistem */
+        "showZoomCtrl": false,
         "autoRotate": -1.5, 
         "autoRotateInactivityDelay": 4000,
         "hfov": 100,
@@ -411,7 +412,7 @@ function submitGuestbook(event) {
     .then(response => response.json())
     .then(data => {
         btn.innerHTML = 'Selamat Datang!';
-        setTimeout(closeGuestbook, 150); /* Dipercepat, langsung tutup dalam 0.15 detik! */
+        setTimeout(closeGuestbook, 150); 
     })
     .catch(error => {
         btn.innerHTML = 'Selamat Datang!';

@@ -15,7 +15,7 @@
         
         #panorama { width: 100vw; height: 100vh; transform: translateZ(0); will-change: transform; position: relative; }
 
-        /* ================= HILANGKAN WATERMARK & BINTIK BAWAAN ================= */
+        /* ================= HILANGKAN WATERMARK & BINTIK BAWAAN PANNELLUM ================= */
         .pnlm-panorama-info { display: none !important; } 
         .pnlm-hotspot-base { background-color: transparent !important; border-radius: 0 !important; }
         .pnlm-hotspot { background: none !important; }
@@ -46,8 +46,8 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK SANGAT PRESISI ================= */
-        /* Menghilangkan bungkus transparan agar bisa dibentuk terpisah-pisah */
+        /* ================= KONTROL PANNELLUM (+, -, Fullscreen, Gyro) TATA LETAK SUPER PRESISI ================= */
+        /* Hapus kotak transparan nyambung bawaan pannellum */
         .pnlm-controls {
             background: transparent !important;
             border: none !important;
@@ -55,53 +55,59 @@
             margin: 0 !important; padding: 0 !important;
         }
 
-        /* Desain Kaca Putih untuk SEMUA Ikon Bawaan */
+        /* Desain Kaca Putih Terpisah untuk setiap ikon hitam bawaan */
         .pnlm-control {
-            background-color: rgba(255, 255, 255, 0.4) !important; /* Latar kaca keputihan */
-            backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.7) !important;
-            border-radius: 6px !important;
+            background-color: rgba(255, 255, 255, 0.7) !important; /* Dibuat lebih putih agar ikon hitam jelas */
+            backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            border-radius: 8px !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
-            width: 26px !important; height: 26px !important; /* Ukuran ini wajib agar Ikon hitam muncul */
-            position: absolute !important;
-            box-sizing: content-box !important;
             transition: all 0.2s ease !important;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+            /* Jangan merubah ukuran ini agar ikon hitam tidak hilang (26x26 adalah bawaan asli) */
         }
-        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.6) !important; }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.95) !important; }
 
-        /* Koordinat pasti berjejer ke bawah (Jarak antar ikon persis 8px) */
-        .pnlm-zoom-controls { top: 20px !important; left: 20px !important; width: 26px !important; height: 60px !important; }
-        .pnlm-zoom-in { top: 0 !important; left: 0 !important; }
-        .pnlm-zoom-out { top: 34px !important; left: 0 !important; } /* 26px + jarak 8px = 34px */
+        /* Koordinat posisi absolut agar sejajar lurus dengan jarak pas 12px antar kotak */
+        .pnlm-zoom-controls { top: 20px !important; left: 20px !important; }
+        .pnlm-zoom-in { position: absolute !important; top: 0 !important; left: 0 !important; }
+        .pnlm-zoom-out { position: absolute !important; top: 38px !important; left: 0 !important; } /* Jarak 12px dari tombol + */
 
-        .pnlm-fullscreen-controls { top: 88px !important; left: 20px !important; width: 26px !important; height: 26px !important; right: auto !important; }
-        .pnlm-fullscreen-toggle-button { top: 0 !important; left: 0 !important; }
+        .pnlm-fullscreen-controls { top: 96px !important; left: 20px !important; right: auto !important; margin: 0 !important; } /* Jarak 12px dari tombol - */
+        .pnlm-orientation-controls { top: 134px !important; left: 20px !important; right: auto !important; margin: 0 !important; } /* Jarak 12px dari tombol fullscreen */
 
-        .pnlm-orientation-controls { top: 122px !important; left: 20px !important; width: 26px !important; height: 26px !important; right: auto !important; }
-        .pnlm-orientation-button { top: 0 !important; left: 0 !important; }
-
-        /* ================= WATERMARK HANYA DI FULLSCREEN (DI BAWAH TAPI DI ATAS NOTIF HP) ================= */
+        /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
         .custom-watermark {
             display: none; 
-            position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); /* Dinaikkan agar tidak tertutup kotak peringatan hitam browser */
-            z-index: 99999; pointer-events: none;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); /* Dipindah ke ATAS agar bebas notif hitam Android */
+            z-index: 999999; pointer-events: none;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 5px 12px; border-radius: 15px; 
+            padding: 6px 14px; border-radius: 15px; 
             color: rgba(255, 255, 255, 1);
-            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
             white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* ================= BUKU TAMU MODAL (PRESISI UKURAN 100% SAMA) ================= */
+        /* ================= TOMBOL MUSIK LEBIH KECIL (34px) ================= */
+        .music-btn {
+            position: absolute; top: 20px; right: 20px; z-index: 999999;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 1);
+            width: 34px; height: 34px; border-radius: 10px;
+            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; padding: 0;
+        }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
+        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
+
+        /* ================= BUKU TAMU MODAL PRESISI ================= */
         #guestbook-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); z-index: 999999; 
+            background: rgba(0, 0, 0, 0.6); z-index: 9999999; 
             justify-content: center; align-items: center;
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             padding: 20px; box-sizing: border-box;
         }
         .guestbook-content {
@@ -121,49 +127,28 @@
         .guestbook-content h3 { margin: 0 0 5px 0; font-size: 22px; color: #ffffff; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
         .guestbook-content p { margin: 0 0 20px 0; font-size: 13px; color: #ffffff; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         
-        /* Input dan Tombol dipaksa ukurannya agar lurus sempurna */
         .gb-input, .gb-btn {
-            display: block !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-            border-radius: 8px !important;
-            padding: 12px !important;
-            font-size: 14px !important;
-            font-family: 'Segoe UI', sans-serif !important;
+            display: block !important; width: 100% !important; box-sizing: border-box !important;
+            border-radius: 8px !important; padding: 12px !important; font-size: 14px !important; font-family: 'Segoe UI', sans-serif !important;
         }
         .gb-input {
-            margin: 0 0 15px 0 !important; 
-            border: 1px solid rgba(255, 255, 255, 0.8) !important;
-            background: rgba(255, 255, 255, 0.8) !important; color: #000 !important; font-weight: 600 !important;
-            transition: all 0.2s !important;
+            margin: 0 0 15px 0 !important; border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            background: rgba(255, 255, 255, 0.85) !important; color: #000 !important; font-weight: 600 !important; transition: all 0.2s !important;
         }
         .gb-input::placeholder { color: #555; font-weight: 500; }
-        .gb-input:focus { outline: none; border-color: #fff !important; background: rgba(255, 255, 255, 0.95) !important; }
+        .gb-input:focus { outline: none; border-color: #fff !important; background: rgba(255, 255, 255, 1) !important; }
         
         .gb-btn {
-            margin: 0 !important; 
-            background: #ffffff !important; color: #000000 !important; 
+            margin: 0 !important; background: #ffffff !important; color: #000000 !important; 
             border: none !important; font-weight: bold !important; cursor: pointer !important; transition: 0.2s !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
         }
         .gb-btn:hover { background: #eeeeee !important; transform: translateY(-2px) !important; box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important; }
 
-        /* ================= TOMBOL MUSIK ================= */
-        .music-btn {
-            position: absolute; top: 20px; right: 20px; z-index: 999999;
-            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4); color: rgba(255, 255, 255, 0.9);
-            width: 36px; height: 36px; border-radius: 10px;
-            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
-            display: flex; align-items: center; justify-content: center; padding: 0;
-        }
-        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
-        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
-
         /* MODAL / POPUP WEB */
         #web-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); z-index: 99999; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.85); z-index: 9999999; justify-content: center; align-items: center;
             backdrop-filter: blur(8px); padding: 15px; box-sizing: border-box;
         }
         .modal-content {
@@ -178,7 +163,7 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* ================= DESAIN IKON HOTSPOT & KETERANGAN ================= */
+        /* ================= DESAIN IKON HOTSPOT & KETERANGAN (Skala Mini & Transparansi 70%) ================= */
         .clean-icon-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; pointer-events: auto; transition: all 0.2s;
@@ -188,49 +173,22 @@
             border-radius: 8px; padding: 4px 8px; opacity: 0.7; 
         }
         .clean-icon-box:hover { transform: translateY(-3px) scale(1.1); opacity: 1; background: rgba(255, 255, 255, 0.3); }
-        
-        .clean-icon-box svg { 
-            width: 18px; height: 18px; 
-            fill: none; stroke: rgba(255, 255, 255, 0.9); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; 
-        }
-        .icon-label {
-            color: #ffffff; font-size: 8px; 
-            font-weight: 700; margin-top: 2px;
-            text-align: center; white-space: nowrap; pointer-events: none;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-        }
+        .clean-icon-box svg { width: 18px; height: 18px; fill: none; stroke: rgba(255, 255, 255, 0.9); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+        .icon-label { color: #ffffff; font-size: 8px; font-weight: 700; margin-top: 2px; text-align: center; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
 
         .icon-arrow-up svg { animation: moveUp 1.5s infinite ease-in-out; }
         @keyframes moveUp { 0%, 100% { transform: translateY(1.5px); } 50% { transform: translateY(-1.5px); } }
 
-        .icon-glow svg { animation: pulseGlow 2.5s infinite ease-in-out; }
-        @keyframes pulseGlow { 
-            0%, 100% { stroke: rgba(255, 255, 255, 0.7); } 
-            50% { stroke: rgba(255, 255, 255, 1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.8)); } 
-        }
-
         /* ================= DESAIN OVERLAY LAYAR MONITOR ================= */
         .monitor-overlay {
-            width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s;
-            pointer-events: auto;
+            cursor: pointer; transition: all 0.3s; pointer-events: auto;
         }
-        .monitor-overlay:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            transform: scale(1.02);
-        }
-        .monitor-text {
-            color: #fff; font-size: 14px; font-weight: bold;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-            pointer-events: none; letter-spacing: 1px;
-        }
+        .monitor-overlay:hover { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.8); box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); transform: scale(1.02); }
+        .monitor-text { color: #fff; font-size: 14px; font-weight: bold; text-shadow: 0 2px 5px rgba(0,0,0,0.8); pointer-events: none; letter-spacing: 1px; }
 
         /* GELEMBUNG INFORMASI 3D */
         .custom-card {
@@ -242,23 +200,13 @@
         }
         .custom-card.show { display: block; animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes popUp { from { opacity: 0; transform: translateY(10px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
         .close-card { float: right; cursor: pointer; color: #000; font-size: 18px; font-weight: bold; line-height: 1; }
         .close-card:hover { color: #555; }
         .custom-card h4 { margin: 0 0 6px 0; font-size: 14px; color: #000; font-weight: 800; border-bottom: 2px solid #000; padding-bottom: 4px; }
         .custom-card p { margin: 0 0 10px 0; font-size: 12px; color: #333; line-height: 1.4; font-weight: 500; }
-        
-        .card-link {
-            display: block; background: #fff; color: #000; text-decoration: none; padding: 6px 10px;
-            border-radius: 6px; font-size: 11px; font-weight: bold; margin-bottom: 6px; text-align: center;
-            border: 2px solid #000; box-shadow: 2px 2px 0 #000; transition: all 0.1s;
-        }
+        .card-link { display: block; background: #fff; color: #000; text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-bottom: 6px; text-align: center; border: 2px solid #000; box-shadow: 2px 2px 0 #000; transition: all 0.1s; }
         .card-link:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #000; background: #e0e0e0; }
-        .wa-button {
-            display: flex; align-items: center; justify-content: center; background: #000; color: #fff; text-decoration: none;
-            padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; gap: 6px; 
-            border: 2px solid #000; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); transition: all 0.1s;
-        }
+        .wa-button { display: flex; align-items: center; justify-content: center; background: #000; color: #fff; text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; gap: 6px; border: 2px solid #000; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); transition: all 0.1s; }
         .wa-button:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0,0,0,0.5); background: #333; }
     </style>
 </head>
@@ -266,12 +214,15 @@
 
 <div id="panorama"></div>
 
-<!-- ELEMEN INI DILETAKKAN DI LUAR PANORAMA DAN DIMASUKKAN LEWAT SCRIPT AGAR SELALU MUNCUL DI FULLSCREEN -->
-<button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
-    <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-</button>
-
-<div class="custom-watermark" id="watermark">Virtual Office - Media Tulisan Manusia</div>
+<!-- ELEMEN INI DIAMANKAN AGAR MUNCUL SAAT FULLSCREEN -->
+<div id="ui-container">
+    <!-- Tombol Musik -->
+    <button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
+        <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+    </button>
+    <!-- Watermark Atas Tengah -->
+    <div class="custom-watermark" id="watermark">Virtual Office - Media Tulisan Manusia</div>
+</div>
 
 <audio id="bg-music" loop>
     <source src="latar1.mp3" type="audio/mpeg">
@@ -366,12 +317,14 @@ var viewer = pannellum.viewer('panorama', {
     }
 });
 
-// MEMASTIKAN TOMBOL MUSIK & WATERMARK TIDAK HILANG SAAT FULLSCREEN
+// MEMASUKKAN UI KITA KE DALAM KANVAS PANNELLUM SECARA PAKSA (AGAR ANTI-HILANG SAAT FULLSCREEN)
 setTimeout(function() {
     var pnlmContainer = document.querySelector('.pnlm-container');
-    pnlmContainer.appendChild(document.getElementById('music-btn'));
-    pnlmContainer.appendChild(document.getElementById('watermark'));
-}, 500);
+    if(pnlmContainer) {
+        pnlmContainer.appendChild(document.getElementById('music-btn'));
+        pnlmContainer.appendChild(document.getElementById('watermark'));
+    }
+}, 1000); // Delay 1 detik untuk memastikan pannellum sudah selesai merender kanvasnya
 
 // ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");
@@ -455,7 +408,7 @@ function closeWebModal() {
     document.getElementById("web-iframe").src = "";
 }
 
-// ================= FUNGSI IKON PANNELLUM UMUM =================
+// ================= FUNGSI IKON PANNELLUM =================
 function customMsgTooltip(hotSpotDiv, args) {
     hotSpotDiv.style.width = '45px'; hotSpotDiv.style.height = '45px'; 
     hotSpotDiv.style.pointerEvents = 'none'; hotSpotDiv.style.display = 'flex'; hotSpotDiv.style.justifyContent = 'center';
@@ -504,7 +457,6 @@ function customDoorTooltip(hotSpotDiv, label) {
     hotSpotDiv.appendChild(doorBtn);
 }
 
-// ================= FUNGSI LAYAR MONITOR =================
 function customMonitorScreen(hotSpotDiv, label) {
     hotSpotDiv.style.width = '260px'; 
     hotSpotDiv.style.height = '145px'; 
@@ -521,7 +473,6 @@ function customMonitorScreen(hotSpotDiv, label) {
     
     hotSpotDiv.appendChild(overlay);
 }
-
 </script>
 
 </body>

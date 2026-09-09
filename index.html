@@ -46,39 +46,46 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL (+, -, Fullscreen, Gyro) TERSUSUN RAPI & PRESISI ================= */
-        .pnlm-controls-container {
-            position: absolute !important;
-            top: 0 !important; left: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            z-index: 9999;
+        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK PRESISI INDIVIDUAL ================= */
+        /* Hapus background kontainer bawaan */
+        .pnlm-controls {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important; margin: 0 !important;
         }
-        
-        /* Mengatur masing-masing kotak kontrol agar presisi ke bawah */
-        .pnlm-zoom-controls, .pnlm-fullscreen-controls, .pnlm-orientation-controls {
-            position: relative !important; 
-            top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
-            margin: 15px 0 0 15px !important; /* Jarak rapi dari pinggir layar dan antar tombol */
-            background: rgba(255, 255, 255, 0.2) !important;
-            backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            border-radius: 8px !important;
-            padding: 4px !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-            /* Tidak menggunakan !important pada 'display' agar Pannellum bisa menyembunyikan tombol yg tdk didukung */
-        }
+        /* Penempatan koordinat grup presisi berjejer ke bawah */
+        .pnlm-zoom-controls { top: 15px !important; left: 15px !important; }
+        .pnlm-fullscreen-controls { top: 83px !important; left: 15px !important; right: auto !important; margin: 0 !important; }
+        .pnlm-orientation-controls { top: 117px !important; left: 15px !important; margin: 0 !important; }
 
-        /* Ukuran WAJIB 26x26px agar ikon potongan sprite bawaan Pannellum tampil sempurna */
+        /* Masing-masing ikon diberikan kotak kaca secara terpisah agar sempurna */
         .pnlm-control {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 6px !important;
             width: 26px !important; height: 26px !important; 
-            background-color: transparent !important;
-            border: none !important; border-radius: 4px !important;
-            margin: 0 !important; 
+            margin-bottom: 8px !important; /* Jarak presisi antar tombol */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+            transition: all 0.2s ease !important;
         }
         .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.4) !important; }
-        .pnlm-zoom-in { margin-bottom: 4px !important; } /* Jarak presisi antara ikon + dan - */
         .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle, .pnlm-orientation-button { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4)); }
+
+        /* ================= WATERMARK HANYA DI FULLSCREEN & DIPINDAH KE ATAS TENGAH ================= */
+        .custom-watermark {
+            display: none; 
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); /* Posisi Di Atas agar tak tertutup notif HP */
+            z-index: 99999; pointer-events: none;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 12px; border-radius: 15px; 
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+            white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
         /* ================= BUKU TAMU MODAL ================= */
         #guestbook-modal {
@@ -115,7 +122,7 @@
         }
         .gb-btn:hover { background: #eeeeee; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
 
-        /* ================= TOMBOL MUSIK ================= */
+        /* ================= TOMBOL MUSIK LEBIH KECIL ================= */
         .music-btn {
             position: absolute; top: 15px; right: 15px; z-index: 9999;
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -145,7 +152,7 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* ================= DESAIN IKON & KETERANGAN (70% Transparansi) ================= */
+        /* ================= DESAIN IKON & KETERANGAN ================= */
         .clean-icon-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; pointer-events: auto; transition: all 0.2s;
@@ -240,6 +247,9 @@
 <button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
     <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
 </button>
+
+<!-- Watermark Bawah Tengah dipindah ke ATAS TENGAH saat Fullscreen -->
+<div class="custom-watermark">Virtual Office - Media Tulisan Manusia</div>
 
 <!-- Modal Buku Tamu -->
 <div id="guestbook-modal">
@@ -463,6 +473,26 @@ var viewer = pannellum.viewer('panorama', {
         }
     }
 });
+
+// ================= LOGIKA WATERMARK MUNCUL SAAT FULLSCREEN =================
+var watermarkDiv = document.createElement('div');
+watermarkDiv.className = 'custom-watermark';
+watermarkDiv.innerHTML = 'Virtual Office - Media Tulisan Manusia';
+document.getElementById('panorama').appendChild(watermarkDiv);
+
+function checkFullscreen() {
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if(isFullscreen) {
+        watermarkDiv.style.display = 'block'; 
+    } else {
+        watermarkDiv.style.display = 'none';  
+    }
+}
+
+document.addEventListener('fullscreenchange', checkFullscreen);
+document.addEventListener('webkitfullscreenchange', checkFullscreen);
+document.addEventListener('mozfullscreenchange', checkFullscreen);
+document.addEventListener('MSFullscreenChange', checkFullscreen);
 
 </script>
 

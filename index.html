@@ -15,7 +15,7 @@
         
         #panorama { width: 100vw; height: 100vh; transform: translateZ(0); will-change: transform; position: relative; }
 
-        /* ================= HILANGKAN WATERMARK & BINTIK BAWAAN PANNELLUM ================= */
+        /* ================= HILANGKAN WATERMARK & BINTIK BAWAAN ================= */
         .pnlm-panorama-info { display: none !important; } 
         .pnlm-hotspot-base { background-color: transparent !important; border-radius: 0 !important; }
         .pnlm-hotspot { background: none !important; }
@@ -46,7 +46,8 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK PRESISI ================= */
+        /* ================= KONTROL (+, -, Fullscreen, Gyro) TATA LETAK SANGAT PRESISI ================= */
+        /* Menghilangkan bungkus transparan agar bisa dibentuk terpisah-pisah */
         .pnlm-controls {
             background: transparent !important;
             border: none !important;
@@ -54,34 +55,40 @@
             margin: 0 !important; padding: 0 !important;
         }
 
+        /* Desain Kaca Putih untuk SEMUA Ikon Bawaan */
         .pnlm-control {
-            background-color: rgba(255, 255, 255, 0.2) !important;
+            background-color: rgba(255, 255, 255, 0.4) !important; /* Latar kaca keputihan */
             backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.7) !important;
             border-radius: 6px !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+            width: 26px !important; height: 26px !important; /* Ukuran ini wajib agar Ikon hitam muncul */
+            position: absolute !important;
             box-sizing: content-box !important;
-            width: 26px !important; height: 26px !important; 
             transition: all 0.2s ease !important;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
         }
-        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.4) !important; }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.6) !important; }
 
-        .pnlm-zoom-in { margin-bottom: 8px !important; }
+        /* Koordinat pasti berjejer ke bawah (Jarak antar ikon persis 8px) */
+        .pnlm-zoom-controls { top: 20px !important; left: 20px !important; width: 26px !important; height: 60px !important; }
+        .pnlm-zoom-in { top: 0 !important; left: 0 !important; }
+        .pnlm-zoom-out { top: 34px !important; left: 0 !important; } /* 26px + jarak 8px = 34px */
 
-        .pnlm-zoom-controls { top: 15px !important; left: 15px !important; width: 26px !important; height: 64px !important; }
-        .pnlm-fullscreen-controls { top: 87px !important; left: 15px !important; right: auto !important; width: 26px !important; height: 26px !important; }
-        .pnlm-orientation-controls { top: 123px !important; left: 15px !important; right: auto !important; width: 26px !important; height: 26px !important; }
+        .pnlm-fullscreen-controls { top: 88px !important; left: 20px !important; width: 26px !important; height: 26px !important; right: auto !important; }
+        .pnlm-fullscreen-toggle-button { top: 0 !important; left: 0 !important; }
 
-        .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle, .pnlm-orientation-button { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4)); }
+        .pnlm-orientation-controls { top: 122px !important; left: 20px !important; width: 26px !important; height: 26px !important; right: auto !important; }
+        .pnlm-orientation-button { top: 0 !important; left: 0 !important; }
 
-        /* ================= WATERMARK HANYA DI FULLSCREEN (DIPINDAH KE ATAS TENGAH) ================= */
+        /* ================= WATERMARK HANYA DI FULLSCREEN (DI BAWAH TAPI DI ATAS NOTIF HP) ================= */
         .custom-watermark {
             display: none; 
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); /* Dinaikkan agar tidak tertutup kotak peringatan hitam browser */
             z-index: 99999; pointer-events: none;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             padding: 5px 12px; border-radius: 15px; 
             color: rgba(255, 255, 255, 1);
             font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
@@ -89,7 +96,7 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* ================= BUKU TAMU MODAL (KOLOM & TOMBOL SEJAJAR PRESISI) ================= */
+        /* ================= BUKU TAMU MODAL (PRESISI UKURAN 100% SAMA) ================= */
         #guestbook-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5); z-index: 999999; 
@@ -99,7 +106,7 @@
         }
         .guestbook-content {
             box-sizing: border-box;
-            width: 90%; max-width: 320px; 
+            width: 100%; max-width: 320px; 
             background: rgba(255, 255, 255, 0.25); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             padding: 30px 25px; border-radius: 16px; 
@@ -114,32 +121,39 @@
         .guestbook-content h3 { margin: 0 0 5px 0; font-size: 22px; color: #ffffff; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
         .guestbook-content p { margin: 0 0 20px 0; font-size: 13px; color: #ffffff; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         
-        /* Input & Tombol disamakan format width & box-sizing nya */
+        /* Input dan Tombol dipaksa ukurannya agar lurus sempurna */
+        .gb-input, .gb-btn {
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            border-radius: 8px !important;
+            padding: 12px !important;
+            font-size: 14px !important;
+            font-family: 'Segoe UI', sans-serif !important;
+        }
         .gb-input {
-            display: block; width: 100%; box-sizing: border-box;
-            padding: 12px; margin: 0 0 15px 0; border-radius: 8px; 
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.8); color: #000; font-weight: 600; font-family: 'Segoe UI', sans-serif;
-            transition: all 0.2s;
+            margin: 0 0 15px 0 !important; 
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            background: rgba(255, 255, 255, 0.8) !important; color: #000 !important; font-weight: 600 !important;
+            transition: all 0.2s !important;
         }
         .gb-input::placeholder { color: #555; font-weight: 500; }
-        .gb-input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.95); }
+        .gb-input:focus { outline: none; border-color: #fff !important; background: rgba(255, 255, 255, 0.95) !important; }
         
         .gb-btn {
-            display: block; width: 100%; box-sizing: border-box;
-            padding: 12px; margin: 0; background: #ffffff; color: #000000; 
-            border: none; border-radius: 8px;
-            font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 0 !important; 
+            background: #ffffff !important; color: #000000 !important; 
+            border: none !important; font-weight: bold !important; cursor: pointer !important; transition: 0.2s !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
         }
-        .gb-btn:hover { background: #eeeeee; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        .gb-btn:hover { background: #eeeeee !important; transform: translateY(-2px) !important; box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important; }
 
         /* ================= TOMBOL MUSIK ================= */
         .music-btn {
-            position: absolute; top: 15px; right: 15px; z-index: 9999;
+            position: absolute; top: 20px; right: 20px; z-index: 999999;
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.4); color: rgba(255, 255, 255, 0.9);
-            width: 34px; height: 34px; border-radius: 10px;
+            width: 36px; height: 36px; border-radius: 10px;
             cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;
             display: flex; align-items: center; justify-content: center; padding: 0;
         }
@@ -250,49 +264,115 @@
 </head>
 <body>
 
-<!-- KONTEN DIMASUKKAN KE DALAM WRAPPER PANORAMA AGAR IKUT SAAT FULLSCREEN -->
-<div id="panorama">
-    
-    <!-- Audio Latar Belakang -->
-    <audio id="bg-music" loop>
-        <source src="latar1.mp3" type="audio/mpeg">
-    </audio>
+<div id="panorama"></div>
 
-    <!-- Tombol Musik (Aman dari Fullscreen) -->
-    <button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
-        <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-    </button>
+<!-- ELEMEN INI DILETAKKAN DI LUAR PANORAMA DAN DIMASUKKAN LEWAT SCRIPT AGAR SELALU MUNCUL DI FULLSCREEN -->
+<button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
+    <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+</button>
 
-    <!-- Watermark Atas Tengah (Hanya muncul saat Fullscreen) -->
-    <div class="custom-watermark" id="watermark">Virtual Office - Media Tulisan Manusia</div>
+<div class="custom-watermark" id="watermark">Virtual Office - Media Tulisan Manusia</div>
 
-    <!-- Modal Buku Tamu -->
-    <div id="guestbook-modal">
-        <div class="guestbook-content">
-            <span class="gb-close" onclick="closeGuestbook()">&times;</span>
-            <h3>Buku Tamu</h3>
-            <p>Silakan masukkan nama Anda untuk mulai</p>
-            <form id="gb-form" onsubmit="submitGuestbook(event)">
-                <input type="text" id="gb-nama" class="gb-input" placeholder="Nama Anda" required>
-                <button type="submit" id="gb-btn" class="gb-btn">Mulai</button>
-            </form>
-        </div>
+<audio id="bg-music" loop>
+    <source src="latar1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Modal Buku Tamu -->
+<div id="guestbook-modal">
+    <div class="guestbook-content">
+        <span class="gb-close" onclick="closeGuestbook()">&times;</span>
+        <h3>Buku Tamu</h3>
+        <p>Silakan masukkan nama Anda untuk mulai</p>
+        <form id="gb-form" onsubmit="submitGuestbook(event)">
+            <input type="text" id="gb-nama" class="gb-input" placeholder="Nama Anda" required>
+            <button type="submit" id="gb-btn" class="gb-btn">Mulai</button>
+        </form>
     </div>
+</div>
 
-    <!-- Modal Preview Website -->
-    <div id="web-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Media Tulisan Manusia</span>
-                <span class="close-modal" onclick="closeWebModal()">&times;</span>
-            </div>
-            <iframe id="web-iframe" class="modal-iframe" src=""></iframe>
+<!-- Modal Preview Website -->
+<div id="web-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Media Tulisan Manusia</span>
+            <span class="close-modal" onclick="closeWebModal()">&times;</span>
         </div>
+        <iframe id="web-iframe" class="modal-iframe" src=""></iframe>
     </div>
-
-</div> <!-- Akhir dari div Panorama -->
+</div>
 
 <script>
+// ================= INIT PANNELLUM =================
+var viewer = pannellum.viewer('panorama', {
+    "default": {
+        "firstScene": "depan",
+        "author": "Media Tulisan Manusia", 
+        "sceneFadeDuration": 800, 
+        "autoLoad": true, 
+        "compass": false,
+        "autoRotate": -1.5, 
+        "autoRotateInactivityDelay": 4000,
+        "hfov": 100,
+        "inertia": 15
+    },
+
+    "scenes": {
+        "depan": {
+            "panorama": "g6.png",
+            "hotSpots": [
+                { "pitch": -26.2, "yaw": 1.4, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk" }
+            ]
+        },
+        "keseluruhan": {
+            "panorama": "g1.png",
+            "hotSpots": [
+                { "pitch": -8.2, "yaw": 27.2, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online\"); return false;' class='card-link'>🌐 Lihat Situs Resmi</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>" },
+                { "pitch": -8.6, "yaw": 156.8, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Resepsionis" },
+                { "pitch": -7.4, "yaw": -57.7, "type": "scene", "sceneId": "depan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Keluar" }
+            ]
+        },
+        "resepsionis": {
+            "panorama": "g2.png",
+            "hotSpots": [
+                { "pitch": -13.1, "yaw": -10.7, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Amankan legalitas karya cipta Anda bersama kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/kategori.pdf\"); return false;' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
+                { "pitch": -6.9, "yaw": 16.3, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Wujudkan buku impian Anda dengan kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/ketentuan.pdf\"); return false;' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
+                { "pitch": -28.9, "yaw": -107.0, "type": "scene", "sceneId": "literasi", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Literasi" },
+                { "pitch": -4.1, "yaw": -40.2, "type": "scene", "sceneId": "rapat", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Rapat" },
+                { "pitch": -13.5, "yaw": 56.8, "type": "scene", "sceneId": "lorong", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Eksekutif" },
+                { "pitch": -13.3, "yaw": 178.7, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Tunggu" }
+            ]
+        },
+        "literasi": {
+            "panorama": "g3.png",
+            "hotSpots": [
+                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
+                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+            ]
+        },
+        "rapat": {
+            "panorama": "g4.png",
+            "hotSpots": [
+                { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
+                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+            ]
+        },
+        "lorong": {
+            "panorama": "g5.png",
+            "hotSpots": [
+                { "pitch": -10.0, "yaw": 20.0, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>" },
+                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+            ]
+        }
+    }
+});
+
+// MEMASTIKAN TOMBOL MUSIK & WATERMARK TIDAK HILANG SAAT FULLSCREEN
+setTimeout(function() {
+    var pnlmContainer = document.querySelector('.pnlm-container');
+    pnlmContainer.appendChild(document.getElementById('music-btn'));
+    pnlmContainer.appendChild(document.getElementById('watermark'));
+}, 500);
+
 // ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");
 var musicBtn = document.getElementById("music-btn");
@@ -310,6 +390,23 @@ musicBtn.addEventListener("click", function() {
         isPlaying = true;
     }
 });
+
+// ================= LOGIKA WATERMARK MUNCUL SAAT FULLSCREEN =================
+var watermarkDiv = document.getElementById('watermark');
+
+function checkFullscreen() {
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if(isFullscreen) {
+        watermarkDiv.style.display = 'block'; 
+    } else {
+        watermarkDiv.style.display = 'none';  
+    }
+}
+
+document.addEventListener('fullscreenchange', checkFullscreen);
+document.addEventListener('webkitfullscreenchange', checkFullscreen);
+document.addEventListener('mozfullscreenchange', checkFullscreen);
+document.addEventListener('MSFullscreenChange', checkFullscreen);
 
 // ================= LOGIKA BUKU TAMU =================
 window.onload = function() {
@@ -425,88 +522,8 @@ function customMonitorScreen(hotSpotDiv, label) {
     hotSpotDiv.appendChild(overlay);
 }
 
-// ================= INIT PANNELLUM =================
-var viewer = pannellum.viewer('panorama', {
-    "default": {
-        "firstScene": "depan",
-        "author": "Media Tulisan Manusia", 
-        "sceneFadeDuration": 800, 
-        "autoLoad": true, 
-        "compass": false,
-        "autoRotate": -1.5, 
-        "autoRotateInactivityDelay": 4000,
-        "hfov": 100,
-        "inertia": 15
-    },
-
-    "scenes": {
-        "depan": {
-            "panorama": "g6.png",
-            "hotSpots": [
-                { "pitch": -26.2, "yaw": 1.4, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk" }
-            ]
-        },
-        "keseluruhan": {
-            "panorama": "g1.png",
-            "hotSpots": [
-                { "pitch": -8.2, "yaw": 27.2, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online\"); return false;' class='card-link'>🌐 Lihat Situs Resmi</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>" },
-                { "pitch": -8.6, "yaw": 156.8, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Resepsionis" },
-                { "pitch": -7.4, "yaw": -57.7, "type": "scene", "sceneId": "depan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Keluar" }
-            ]
-        },
-        "resepsionis": {
-            "panorama": "g2.png",
-            "hotSpots": [
-                { "pitch": -13.1, "yaw": -10.7, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Amankan legalitas karya cipta Anda bersama kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/kategori.pdf\"); return false;' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
-                { "pitch": -6.9, "yaw": 16.3, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Wujudkan buku impian Anda dengan kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online/ketentuan.pdf\"); return false;' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 WhatsApp Kami</a>" },
-                { "pitch": -28.9, "yaw": -107.0, "type": "scene", "sceneId": "literasi", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Literasi" },
-                { "pitch": -4.1, "yaw": -40.2, "type": "scene", "sceneId": "rapat", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Rapat" },
-                { "pitch": -13.5, "yaw": 56.8, "type": "scene", "sceneId": "lorong", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Eksekutif" },
-                { "pitch": -13.3, "yaw": 178.7, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Tunggu" }
-            ]
-        },
-        "literasi": {
-            "panorama": "g3.png",
-            "hotSpots": [
-                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
-                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
-            ]
-        },
-        "rapat": {
-            "panorama": "g4.png",
-            "hotSpots": [
-                { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customMonitorScreen, "createTooltipArgs": "Buka Layar" },
-                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
-            ]
-        },
-        "lorong": {
-            "panorama": "g5.png",
-            "hotSpots": [
-                { "pitch": -10.0, "yaw": 20.0, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>" },
-                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
-            ]
-        }
-    }
-});
-
-// ================= LOGIKA WATERMARK MUNCUL SAAT FULLSCREEN =================
-var watermarkDiv = document.getElementById('watermark');
-
-function checkFullscreen() {
-    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-    if(isFullscreen) {
-        watermarkDiv.style.display = 'block'; 
-    } else {
-        watermarkDiv.style.display = 'none';  
-    }
-}
-
-document.addEventListener('fullscreenchange', checkFullscreen);
-document.addEventListener('webkitfullscreenchange', checkFullscreen);
-document.addEventListener('mozfullscreenchange', checkFullscreen);
-document.addEventListener('MSFullscreenChange', checkFullscreen);
-
 </script>
 
 </body>
 </html>
+

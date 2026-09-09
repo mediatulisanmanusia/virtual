@@ -46,44 +46,39 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
-        /* ================= KONTROL (+, -, Fullscreen, Gyroscope) PERBAIKAN TATA LETAK PRESISI ================= */
-        .pnlm-controls {
+        /* ================= KONTROL (+, -, Fullscreen, Gyro) TERSUSUN RAPI & PRESISI ================= */
+        .pnlm-controls-container {
+            position: absolute !important;
+            top: 0 !important; left: 0 !important;
             display: flex !important;
             flex-direction: column !important;
-            gap: 6px !important; 
+            z-index: 9999;
+        }
+        
+        /* Mengatur masing-masing kotak kontrol agar presisi ke bawah */
+        .pnlm-zoom-controls, .pnlm-fullscreen-controls, .pnlm-orientation-controls {
+            position: relative !important; 
+            top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+            margin: 15px 0 0 15px !important; /* Jarak rapi dari pinggir layar dan antar tombol */
             background: rgba(255, 255, 255, 0.2) !important;
             backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
             border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            border-radius: 12px !important; padding: 6px !important;
-            width: auto !important; height: auto !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-            margin-top: 15px !important; margin-left: 15px !important;
-            transform: scale(0.9) !important; 
-            transform-origin: top left !important;
+            border-radius: 8px !important;
+            padding: 4px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+            /* Tidak menggunakan !important pada 'display' agar Pannellum bisa menyembunyikan tombol yg tdk didukung */
         }
+
+        /* Ukuran WAJIB 26x26px agar ikon potongan sprite bawaan Pannellum tampil sempurna */
         .pnlm-control {
-            position: relative !important; top: 0 !important; left: 0 !important;
-            background-color: transparent !important; border: none !important;
-            border-radius: 6px !important; margin: 0 !important; 
             width: 26px !important; height: 26px !important; 
-            transition: all 0.2s ease !important;
+            background-color: transparent !important;
+            border: none !important; border-radius: 4px !important;
+            margin: 0 !important; 
         }
         .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.4) !important; }
+        .pnlm-zoom-in { margin-bottom: 4px !important; } /* Jarak presisi antara ikon + dan - */
         .pnlm-zoom-in, .pnlm-zoom-out, .pnlm-fullscreen-toggle, .pnlm-orientation-button { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4)); }
-
-        /* ================= WATERMARK HANYA DI FULLSCREEN & PALING BAWAH ================= */
-        .custom-watermark {
-            display: none; 
-            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-            z-index: 99999; pointer-events: none;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 5px 12px; border-radius: 15px; 
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-            white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
 
         /* ================= BUKU TAMU MODAL ================= */
         #guestbook-modal {
@@ -150,7 +145,7 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* ================= DESAIN IKON & KETERANGAN ================= */
+        /* ================= DESAIN IKON & KETERANGAN (70% Transparansi) ================= */
         .clean-icon-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; pointer-events: auto; transition: all 0.2s;
@@ -245,9 +240,6 @@
 <button id="music-btn" class="music-btn" title="Putar/Jeda Musik">
     <svg id="music-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
 </button>
-
-<!-- Watermark Bawah Tengah -->
-<div class="custom-watermark">Virtual Office - Media Tulisan Manusia</div>
 
 <!-- Modal Buku Tamu -->
 <div id="guestbook-modal">
@@ -472,28 +464,7 @@ var viewer = pannellum.viewer('panorama', {
     }
 });
 
-// ================= LOGIKA WATERMARK MUNCUL SAAT FULLSCREEN =================
-var watermarkDiv = document.createElement('div');
-watermarkDiv.className = 'custom-watermark';
-watermarkDiv.innerHTML = 'Virtual Office - Media Tulisan Manusia';
-document.getElementById('panorama').appendChild(watermarkDiv);
-
-function checkFullscreen() {
-    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-    if(isFullscreen) {
-        watermarkDiv.style.display = 'block'; 
-    } else {
-        watermarkDiv.style.display = 'none';  
-    }
-}
-
-document.addEventListener('fullscreenchange', checkFullscreen);
-document.addEventListener('webkitfullscreenchange', checkFullscreen);
-document.addEventListener('mozfullscreenchange', checkFullscreen);
-document.addEventListener('MSFullscreenChange', checkFullscreen);
-
 </script>
 
 </body>
 </html>
-

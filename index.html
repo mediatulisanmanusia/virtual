@@ -169,7 +169,7 @@
 <div id="web-modal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>Situs Resmi: Media Tulisan Manusia</span>
+            <span>Media Tulisan Manusia</span>
             <span class="close-modal" onclick="closeWebModal()">&times;</span>
         </div>
         <iframe id="web-iframe" class="modal-iframe" src=""></iframe>
@@ -326,14 +326,14 @@ var viewer = pannellum.viewer('panorama', {
         "depan": {
             "panorama": "g6.png",
             "hotSpots": [
-                { "pitch": -26.2, "yaw": 1.4, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk Kantor" }
+                { "pitch": -26.2, "yaw": 1.4, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk" }
             ]
         },
         "keseluruhan": {
             "panorama": "g1.png",
             "hotSpots": [
                 { "pitch": -8.2, "yaw": 27.2, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office kami.</p><a href='#' onclick='openWebModal(\"https://mediatulisanmanusia.online\"); return false;' class='card-link'>🌐 Lihat Situs Resmi</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>" },
-                { "pitch": -8.6, "yaw": 156.8, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Ke Resepsionis" },
+                { "pitch": -8.6, "yaw": 156.8, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customArrowTooltip, "createTooltipArgs": "Resepsionis" },
                 { "pitch": -7.4, "yaw": -57.7, "type": "scene", "sceneId": "depan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Keluar" }
             ]
         },
@@ -352,23 +352,23 @@ var viewer = pannellum.viewer('panorama', {
         "literasi": {
             "panorama": "g3.png",
             "hotSpots": [
-                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customWebLink, "createTooltipArgs": "Buka Website" },
-                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+                { "pitch": -3.3, "yaw": 65.8, "createTooltipFunc": customWebLink, "createTooltipArgs": "Buka Layar" },
+                { "pitch": -2.8, "yaw": -146.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
             ]
         },
         "rapat": {
             "panorama": "g4.png",
             "hotSpots": [
                 { "pitch": 29.1, "yaw": 1.7, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
-                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+                { "pitch": -2.1, "yaw": -104.0, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
             ]
         },
         "lorong": {
             "panorama": "g5.png",
             "hotSpots": [
                 { "pitch": -10.0, "yaw": 20.0, "type": "info", "createTooltipFunc": customMsgTooltip, "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>" },
-                { "pitch": -2.1, "yaw": 36.6, "createTooltipFunc": customWebLink, "createTooltipArgs": "Situs Resmi" },
-                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Kembali" }
+                { "pitch": -2.1, "yaw": 36.6, "createTooltipFunc": customWebLink, "createTooltipArgs": "Website" },
+                { "pitch": 5.1, "yaw": 1.7, "type": "scene", "sceneId": "resepsionis", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Resepsionis" }
             ]
         }
     }

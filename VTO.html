@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Virtual Office Tour - Media Tulisan Manusia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #000; font-family: 'Segoe UI', sans-serif; }
+        #panorama { width: 100vw; height: 100vh; }
+
+        /* TOMBOL MUSIK (Glassmorphism) */
+        .music-btn {
+            position: absolute; top: 20px; right: 20px; z-index: 9999;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4); color: #fff;
+            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+
+        /* ICON KLIK LAYANAN (Bulat Emas 3D) */
+        .custom-info-icon {
+            width: 42px; height: 42px; 
+            background: linear-gradient(135deg, #ffd700, #b8860b); 
+            color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.6); 
+            border: 2px solid #fff; transition: transform 0.2s; pointer-events: auto;
+        }
+        .custom-info-icon:hover { transform: scale(1.15); }
+
+        /* DESAIN GELEMBUNG 3D - TRANSPARAN & GRADASI EMAS */
+        .custom-card {
+            display: none; 
+            position: absolute; bottom: 60px; left: -110px;
+            background: rgba(20, 20, 20, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 18px 22px; 
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(212,175,55,0.3); 
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(20, 20, 20, 0.55), rgba(20, 20, 20, 0.55)), linear-gradient(135deg, #ffd700, #85581a);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            width: 260px; text-align: left;
+            color: #fff; pointer-events: auto;
+            cursor: default;
+        }
+        .custom-card.show { display: block; animation: popUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popUp { from { opacity: 0; transform: translateY(15px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* Tombol Tutup (X) */
+        .close-card { float: right; cursor: pointer; color: #aaa; font-size: 18px; font-weight: bold; line-height: 1; margin-left: 10px; transition: color 0.2s; }
+        .close-card:hover { color: #ffd700; }
+
+        .custom-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #ffd700; font-weight: 700; width: 85%; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .custom-card p { margin: 0 0 12px 0; font-size: 12px; color: #e0e0e0; line-height: 1.5; font-weight: 400; }
+        
+        .card-link {
+            display: block; background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; padding: 8px 12px;
+            border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 8px; 
+            border: 1px solid rgba(255, 215, 0, 0.3); transition: all 0.2s;
+        }
+        .card-link:hover { background: #ffd700; color: #111; border-color: #ffd700; }
+        
+        .wa-button {
+            display: inline-flex; align-items: center; background: #25d366; color: white; text-decoration: none;
+            padding: 7px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; gap: 6px; 
+            box-shadow: 0 4px 10px rgba(37,211,102,0.4); transition: transform 0.2s;
+        }
+        .wa-button:hover { background: #1ebe57; transform: scale(1.05); }
+
+        /* ICON LOGO CUSTOM */
+        .custom-logo-icon {
+            width: 48px; height: 48px; background-image: url('lg1.png'); background-size: contain; background-repeat: no-repeat; 
+            background-position: center; cursor: pointer; filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6)); transition: transform 0.2s;
+        }
+        .custom-logo-icon:hover { transform: scale(1.15); }
+    </style>
+</head>
+<body>
+
+<!-- Audio Latar Belakang -->
+<audio id="bg-music" loop>
+    <source src="latar1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Tombol Musik -->
+<button id="music-btn" class="music-btn">🎵 Putar Musik</button>
+
+<div id="panorama"></div>
+
+<script>
+var music = document.getElementById("bg-music");
+var musicBtn = document.getElementById("music-btn");
+var isPlaying = false;
+
+musicBtn.addEventListener("click", function() {
+    if (isPlaying) {
+        music.pause();
+        musicBtn.innerHTML = "🎵 Putar Musik";
+        isPlaying = false;
+    } else {
+        music.play();
+        musicBtn.innerHTML = "🔊 Jeda Musik";
+        isPlaying = true;
+    }
+});
+
+function customInteractiveTooltip(hotSpotDiv, args) {
+    hotSpotDiv.style.width = '42px';
+    hotSpotDiv.style.height = '42px';
+    hotSpotDiv.style.pointerEvents = 'none';
+
+    var iconBtn = document.createElement('div');
+    iconBtn.className = 'custom-info-icon';
+    iconBtn.innerHTML = 'i';
+
+    var cardDiv = document.createElement('div');
+    cardDiv.className = 'custom-card';
+    cardDiv.innerHTML = "<span class='close-card'>&times;</span>" + args;
+
+    iconBtn.onclick = function(e) {
+        var allCards = document.querySelectorAll('.custom-card');
+        allCards.forEach(c => { if(c !== cardDiv) c.classList.remove('show'); });
+        cardDiv.classList.toggle('show');
+        e.stopPropagation();
+    };
+
+    var closeBtn = cardDiv.querySelector('.close-card');
+    closeBtn.onclick = function(e) {
+        cardDiv.classList.remove('show');
+        e.stopPropagation();
+    };
+
+    cardDiv.onmousedown = function(e) { e.stopPropagation(); };
+    cardDiv.ontouchstart = function(e) { e.stopPropagation(); };
+
+    hotSpotDiv.appendChild(iconBtn);
+    hotSpotDiv.appendChild(cardDiv);
+}
+
+var viewer = pannellum.viewer('panorama', {
+    "default": {
+        "firstScene": "depan",
+        "author": "Media Tulisan Manusia",
+        "sceneFadeDuration": 1500, 
+        "autoLoad": true, 
+        "compass": false,
+        "autoRotate": -2, 
+        "autoRotateInactivityDelay": 3000
+    },
+
+    "scenes": {
+        "depan": {
+            "panorama": "g6.png",
+            "hotSpots": [
+                { "pitch": -56.7, "yaw": 8.2, "type": "scene", "text": "Masuk ke Ruang Tunggu", "sceneId": "keseluruhan" }
+            ]
+        },
+
+        "keseluruhan": {
+            "panorama": "g1.png",
+            "hotSpots": [
+                {
+                    "pitch": -10.0, "yaw": 15.0, 
+                    "type": "info",
+                    "createTooltipFunc": customInteractiveTooltip,
+                    "createTooltipArgs": "<h4>Selamat Datang!</h4><p>Terima kasih telah berkunjung ke Virtual Office PT Media Tulisan Manusia.</p><a href='https://mediatulisanmanusia.online' target='_blank' class='card-link'>🌐 Situs Resmi Kami</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
+                },
+                { "pitch": -23.0, "yaw": 50.4, "type": "scene", "text": "Maju ke Meja Resepsionis", "sceneId": "resepsionis" },
+                { "pitch": -38.5, "yaw": 2.7, "type": "scene", "text": "Keluar Kantor", "sceneId": "depan" }
+            ]
+        },
+
+        "resepsionis": {
+            "panorama": "g2.png",
+            "hotSpots": [
+                {
+                    "pitch": 1.6, "yaw": 49.4,
+                    "type": "info",
+                    "createTooltipFunc": customInteractiveTooltip,
+                    "createTooltipArgs": "<h4>Layanan Hak Cipta</h4><p>Selamat datang, mari amankan legalitas karya cipta Anda bersama kami.</p><a href='https://mediatulisanmanusia.online/kategori.pdf' target='_blank' class='card-link'>📄 Kategori Hak Cipta</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
+                },
+                {
+                    "pitch": -6.9, "yaw": 16.3,
+                    "type": "info",
+                    "createTooltipFunc": customInteractiveTooltip,
+                    "createTooltipArgs": "<h4>Layanan Penerbitan</h4><p>Selamat datang, wujudkan buku impian Anda dengan layanan profesional kami.</p><a href='https://mediatulisanmanusia.online/ketentuan.pdf' target='_blank' class='card-link'>📄 Ketentuan Penerbitan</a><a href='https://wa.me/6288294448222' target='_blank' class='wa-button'>💬 Hubungi WhatsApp</a>"
+                },
+                {
+                    "pitch": 31.3, "yaw": -8.4,
+                    "cssClass": "custom-logo-icon",
+                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
+                },
+                { "pitch": -28.4, "yaw": -42.3, "type": "scene", "text": "Masuk ke Ruang Literasi", "sceneId": "literasi" },
+                { "pitch": -42.1, "yaw": -124.7, "type": "scene", "text": "Masuk ke Ruang Rapat", "sceneId": "rapat" },
+                { "pitch": -35.8, "yaw": 100.7, "type": "scene", "text": "Menuju Ruang Eksekutif", "sceneId": "lorong" },
+                { "pitch": -29.4, "yaw": 177.2, "type": "scene", "text": "Mundur ke Ruang Tunggu", "sceneId": "keseluruhan" }
+            ]
+        },
+
+        "literasi": {
+            "panorama": "g3.png",
+            "hotSpots": [
+                {
+                    "pitch": 20.0, "yaw": 0.0,
+                    "cssClass": "custom-logo-icon",
+                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
+                },
+                { "pitch": -40.9, "yaw": 178.6, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+            ]
+        },
+
+        "rapat": {
+            "panorama": "g4.png",
+            "hotSpots": [
+                {
+                    "pitch": 25.0, "yaw": 90.0,
+                    "cssClass": "custom-logo-icon",
+                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
+                },
+                { "pitch": -40.6, "yaw": -159.9, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+            ]
+        },
+
+        "lorong": {
+            "panorama": "g5.png",
+            "hotSpots": [
+                {
+                    "pitch": -10.0, "yaw": 20.0,
+                    "type": "info",
+                    "createTooltipFunc": customInteractiveTooltip,
+                    "createTooltipArgs": "<h4>Ruang Eksekutif</h4><p>Hubungi bagian manajemen/pimpinan.</p><a href='https://wa.me/682233456016' target='_blank' class='wa-button'>💬 WhatsApp Pimpinan</a>"
+                },
+                {
+                    "pitch": 25.0, "yaw": 40.0,
+                    "cssClass": "custom-logo-icon",
+                    "text": "Menuju Situs Resmi", "URL": "https://mediatulisanmanusia.online"
+                },
+                { "pitch": -53.1, "yaw": -133.5, "type": "scene", "text": "Kembali ke Resepsionis", "sceneId": "resepsionis" }
+            ]
+        }
+    }
+});
+</script>
+
+</body>
+</html>

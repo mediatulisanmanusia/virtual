@@ -22,38 +22,43 @@
         .pnlm-tooltip { display: none !important; }
         .pnlm-about-dialog { display: none !important; }
 
-        /* ================= LOADING PROGRESS DIGANTI GAMBAR LOGO ================= */
-        .pnlm-load-box p, .pnlm-lbox, .pnlm-progressbar { display: none !important; } 
-        
+        /* ================= LOADING PROGRESS (DESAIN BAR MINIMALIS DI TENGAH) ================= */
         .pnlm-load-box {
-            background: transparent !important; border: none !important; box-shadow: none !important;
             position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
-            width: 50px !important; height: 50px !important; z-index: 999999; pointer-events: none;
-            background-image: url('lg1.png') !important; background-size: contain !important;
-            background-repeat: no-repeat !important; background-position: center !important;
-            animation: pulseLogo 1.8s infinite ease-in-out;
+            background: rgba(20, 20, 20, 0.8) !important; backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important; border-radius: 12px !important; 
+            padding: 15px 20px !important; width: 180px !important; 
+            text-align: center !important; z-index: 999999 !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
         }
-
-        @keyframes pulseLogo {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.15; }
-            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.15; }
+        .pnlm-load-box p { 
+            display: block !important; color: #fff !important; font-size: 12px !important; 
+            font-weight: bold !important; margin: 0 0 10px 0 !important; letter-spacing: 1px !important; 
+        }
+        .pnlm-lbox { display: none !important; } /* Sembunyikan spinner berputar bawaan */
+        .pnlm-progressbar {
+            position: relative !important; display: block !important;
+            width: 100% !important; height: 6px !important; border-radius: 4px !important;
+            background: rgba(255, 255, 255, 0.2) !important; overflow: hidden !important;
+        }
+        .pnlm-progressbar-fill {
+            background: #ffffff !important; height: 100% !important; border-radius: 4px !important;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
         }
 
         /* ================= KONTROL NAVIGASI KIRI ATAS ================= */
         .pnlm-controls-container { top: 20px !important; left: 20px !important; z-index: 99999 !important; position: absolute !important; }
         .pnlm-controls { background: transparent !important; border: none !important; box-shadow: none !important; }
 
-        /* ================= DESAIN KACA PUTIH UNTUK SEMUA TOMBOL (NAVIGASI & MUSIK) ================= */
+        /* ================= DESAIN KACA PUTIH UNTUK TOMBOL NAVIGASI ================= */
         .pnlm-control {
             background-image: none !important; 
-            background-color: rgba(255, 255, 255, 0.2) !important;
+            background-color: rgba(255, 255, 255, 0.15) !important;
             backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important;
             border: 1px solid rgba(255, 255, 255, 0.4) !important;
             border-radius: 8px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; transition: all 0.2s ease !important;
             width: 34px !important; height: 34px !important;
         }
-        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.4) !important; }
+        .pnlm-control:hover { background-color: rgba(255, 255, 255, 0.3) !important; }
 
         .pnlm-fullscreen-controls { top: 0 !important; left: 0 !important; width: 34px !important; height: 34px !important; }
         .pnlm-orientation-controls { top: 44px !important; left: 0 !important; margin-top: 0 !important; width: 34px !important; height: 34px !important; }
@@ -83,6 +88,7 @@
         #guestbook-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999999; justify-content: center; align-items: center; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 20px; box-sizing: border-box; }
         .guestbook-content { box-sizing: border-box; width: 100%; max-width: 320px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 30px 25px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.5); border-bottom: 3px solid rgba(255, 255, 255, 0.2); text-align: center; position: relative; color: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin: auto; }
         
+        /* Tombol X (Tutup) Diubah untuk langsung memicu Animasi Turun */
         .gb-close { position: absolute; top: 12px; right: 18px; cursor: pointer; color: #fff; font-size: 22px; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
         .gb-close:hover { color: #ddd; }
         
@@ -96,17 +102,16 @@
         .gb-btn { margin: 0 !important; background: #ffffff !important; color: #000000 !important; border: none !important; font-weight: bold !important; cursor: pointer !important; transition: 0.2s !important; box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; }
         .gb-btn:hover { background: #eeeeee !important; transform: translateY(-2px) !important; box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important; }
 
-        /* ================= TOMBOL MUSIK (DISERAGAMKAN 100%) ================= */
+        /* ================= TOMBOL MUSIK ================= */
         .music-btn {
             position: absolute; top: 20px; right: 20px; z-index: 999999; 
-            background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.4); 
-            color: #000000; /* Ikon diubah jadi Hitam agar seragam dengan ikon kamera */
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4); color: rgba(255, 255, 255, 0.9);
             width: 34px; height: 34px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.2s ease;
             display: flex; align-items: center; justify-content: center; padding: 0;
         }
-        .music-btn:hover { background-color: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
-        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(255,255,255,0.7)); }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
+        .music-btn svg { width: 14px; height: 14px; fill: currentColor; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
 
         /* ================= MODAL / POPUP WEB ================= */
         #web-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9999999; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 15px; box-sizing: border-box; }
@@ -116,17 +121,17 @@
         .close-modal:hover { color: #ccc; }
         .modal-iframe { width: 100%; height: 100%; border: none; background: #f0f0f0; }
 
-        /* ================= DESAIN IKON HOTSPOT (GELEMBUNG LEBIH TRANSPARAN & HALUS) ================= */
+        /* ================= DESAIN IKON HOTSPOT (GELEMBUNG GELAP TRANSPARAN KECIL) ================= */
         .clean-icon-box { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             cursor: pointer; pointer-events: auto; transition: all 0.2s; 
-            background: rgba(20, 20, 20, 0.25); /* Dibuat sangat halus dan transparan */
+            background: rgba(20, 20, 20, 0.25); /* Transparan Halus */
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
             border-radius: 8px; padding: 4px 6px; 
             opacity: 0.9; 
         }
-        .clean-icon-box:hover { transform: translateY(-3px) scale(1.1); background: rgba(20, 20, 20, 0.45); }
+        .clean-icon-box:hover { transform: translateY(-3px) scale(1.1); opacity: 1; background: rgba(20, 20, 20, 0.45); }
         .clean-icon-box svg { width: 16px; height: 16px; fill: none; stroke: rgba(255, 255, 255, 0.95); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
         .icon-label { color: #ffffff; font-size: 7px; font-weight: 700; margin-top: 2px; text-align: center; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 3px rgba(0,0,0,0.8); letter-spacing: 0.5px;}
         .icon-arrow-up svg { animation: moveUp 1.5s infinite ease-in-out; }
@@ -183,6 +188,7 @@
 
 <div id="guestbook-modal">
     <div class="guestbook-content">
+        <!-- TOMBOL X JUGA MEMICU ANIMASI TURUN -->
         <span class="gb-close" onclick="triggerSwoopDown()">&times;</span>
         <h3>BUKU TAMU</h3>
         <p>Masukkan Nama Anda Dan Mulai</p>
@@ -204,6 +210,8 @@
 </div>
 
 <script>
+var isInitialLoad = true; // Flag untuk mendeteksi awal masuk
+
 // ================= INIT PANNELLUM =================
 var viewer = pannellum.viewer('panorama', {
     "default": {
@@ -215,7 +223,7 @@ var viewer = pannellum.viewer('panorama', {
         "showZoomCtrl": false,
         "autoRotate": -1.5, 
         "autoRotateInactivityDelay": 4000,
-        "autoRotatePitch": -21.3,
+        "autoRotatePitch": -21.3, /* KUNCI AGAR PUTARAN OTOMATIS TIDAK BALIK KE LANGIT */
         "hfov": 120,    
         "maxHfov": 120, 
         "minHfov": 50,  
@@ -225,7 +233,7 @@ var viewer = pannellum.viewer('panorama', {
     "scenes": {
         "depan": {
             "panorama": "g6.png",
-            "pitch": 60, /* POSISI AWAL KAMERA MENATAP LANGIT */
+            "pitch": 60, /* POSISI AWAL KAMERA MENATAP LANGIT (Hanya untuk animasi penyambut) */
             "yaw": 33.9,
             "hotSpots": [
                 { "pitch": -21.3, "yaw": 33.9, "type": "scene", "sceneId": "keseluruhan", "createTooltipFunc": customDoorTooltip, "createTooltipArgs": "Masuk" }
@@ -290,6 +298,26 @@ setTimeout(function() {
     }
 }, 1000); 
 
+// ================= LOGIKA ANIMASI KELUAR KE DEPAN =================
+// Setiap kali scene berpindah kembali ke "depan", jalankan lagi animasi turunnya
+viewer.on('scenechange', function(sceneId) {
+    if (sceneId === 'depan' && !isInitialLoad) {
+        // Secara diam-diam (tanpa animasi) pindahkan kamera menghadap langit dulu
+        viewer.setPitch(60, false);
+        viewer.setYaw(33.9, false);
+        viewer.stopAutoRotate();
+        
+        // Beri jeda sedikit agar gambar selesai dimuat, lalu luncurkan animasi turun
+        setTimeout(function() {
+            viewer.setPitch(-21.3, 2500);
+            viewer.setYaw(33.9, 2500);
+            setTimeout(function(){
+                viewer.startAutoRotate(-1.5, -21.3);
+            }, 3000);
+        }, 150);
+    }
+});
+
 // ================= LOGIKA MUSIK =================
 var music = document.getElementById("bg-music");
 var musicBtn = document.getElementById("music-btn");
@@ -350,10 +378,14 @@ function submitGuestbook(event) {
 
 function triggerSwoopDown() {
     document.getElementById('guestbook-modal').style.display = 'none';
+    isInitialLoad = false; // Tandai bahwa loading pertama selesai
     if (typeof viewer !== 'undefined') {
         viewer.stopAutoRotate();
+        // Animasi turun (swoop down)
         viewer.setPitch(-21.3, 2500);
         viewer.setYaw(33.9, 2500);
+        
+        // Aktifkan kembali putaran otomatis, mengunci posisi tetap menghadap pintu (-21.3)
         setTimeout(function(){
             viewer.startAutoRotate(-1.5, -21.3);
         }, 3000);
